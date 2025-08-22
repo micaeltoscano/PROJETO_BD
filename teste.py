@@ -4,20 +4,7 @@
 import psycopg2
 
 def conectar_ao_banco():
-    try:
-        conn = psycopg2.connect(
-            host="localhost",
-            port=5433,
-            database="barbearia",
-            user="postgres",
-            password="senha"
-        )
-        print("Conexão bem-sucedida!")
-        return conn
-    
-    except Exception as e:
-        print(f"Erro ao conectar ao banco de dados: {e}")
-        return None
+   return #fazueli (tinha esquecido de apagar os dados daqui KKKKKKKKK)
     
 def criar_cliente(nome, email, cpf, endereco, numero_celular):
     conn = conectar_ao_banco()
