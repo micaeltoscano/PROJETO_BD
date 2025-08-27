@@ -1,6 +1,10 @@
 from crud import Crud
 
 class Estoque(Crud):
+    
+    tabela = 'estoque'
+    colunas_permitidas = ['id_produto', 'quantidade_atual', 'quantidade_minima', 'quantidade_maxima']
+    coluna_id = 'idestoque'
 
     def cadastro_estoque(self, id_produto, quantidade_atual, quantidade_minima, quantidade_maxima):
         

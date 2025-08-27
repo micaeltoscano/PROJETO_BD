@@ -2,16 +2,9 @@ from crud import Crud
 
 class Pagamento(Crud):
 
-    def cadastro_pagamento(self, IDPAGAMENTO, IDAGENDA, VALOR, FORMA_PAGAMENTO, DATA_PAGAMENTO, ID_COMPRA, TIPO_PAGAMENTO):
-        super().cadastro(
-            IDPAGAMENTO = IDPAGAMENTO, 
-            IDAGENDA = IDAGENDA, 
-            VALOR = VALOR, 
-            FORMA_PAGAMENTO = FORMA_PAGAMENTO, 
-            DATA_PAGAMENTO = DATA_PAGAMENTO, 
-            ID_COMPRA = ID_COMPRA, 
-            TIPO_PAGAMENTO = TIPO_PAGAMENTO
-        )
+    tabela = 'pagamento'
+    colunas_permitidas = ['idcliente', 'idagenda', 'valor', 'data_pagamento', 'metodo_pagamento']
+    coluna_id = 'idpagamento'
     
     def ler(self):
         return super().ler()

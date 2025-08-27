@@ -2,6 +2,10 @@ from crud import Crud
 
 class Categoria(Crud):
 
+    tabela = 'categoria'
+    colunas_permitidas = ['nome_categoria']
+    coluna_id = 'idcategoria'
+
     def cadastro_categoria(self, nome_categoria):
         super().cadastro(
             nome_categoria = nome_categoria

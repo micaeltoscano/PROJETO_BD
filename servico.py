@@ -2,11 +2,16 @@ from crud import Crud
 
 class Servico(Crud):
 
-    def cadastro_servico(self, nome_servico, valor, nome_categoria, duracao):
+    tabela = "servico"
+    colunas_permitidas = ['nome', 'valor', 'duracao']
+    coluna_id = 'idservico'
+
+    def cadastro_servico(self, nome_servico, valor, id_categoria, duracao):
+
         super().cadastro(
             nome_servico = nome_servico, 
             valor = valor, 
-            nome_categoria = nome_categoria, 
+            id_categoria = id_categoria, 
             duracao = duracao
         )
 
@@ -18,3 +23,5 @@ class Servico(Crud):
     
     def deletar_servico(self, id):
         return super().deletar(id)
+    
+    

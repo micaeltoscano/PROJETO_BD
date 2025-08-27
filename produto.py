@@ -2,6 +2,10 @@ from crud import Crud
 
 class Produto(Crud):
 
+    tabela = 'produto'
+    colunas_permitidas = ['valor', 'nome', 'tipo']
+    coluna_id = 'idproduto'
+    
     def cadastro_produto(self, valor, nome, tipo):
         super().cadastro(
             valor = valor, 
