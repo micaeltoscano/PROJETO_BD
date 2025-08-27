@@ -16,6 +16,7 @@ class Banco:
             "password": os.getenv("DB_PASSWORD")
         }
     
+    
     #CONECTAR O BANCO DE DADOS COM O PYTHON
     def conectar(self):
         conn = psycopg2.connect(

@@ -1,0 +1,35 @@
+from crud import Crud
+
+class Disponibilidade(Crud):
+
+    tabela = "disponibilidade"
+    colunas_permitidas = ['id_funcionario', 'dia_semana', 'hora_inicio', 'hora_fim']
+    coluna_id = 'id'
+
+    def cadastro_disponibilidade(self, funcionario_id, dia_semana, hora_inicio, hora_fim):
+
+        jacadastrado = self.processar(
+                                        """SELECT 1 
+                                        FROM disponibilidade 
+                                        WHERE funcionario_id = %s AND dia_semana = %s AND hora_inicio = %s AND hora_fim = %s""",
+                                        (funcionario_id, dia_semana, hora_inicio, hora_fim), fetch=True)
+        if jacadastrado:
+                print("Disponibilidade já cadastrada para esse funcionário nesse horário.")
+                return
+        
+        super().cadastro(
+            funcionario_id = funcionario_id,
+            dia_semana = dia_semana,
+            hora_inicio = hora_inicio,
+            hora_fim = hora_fim
+        )
+
+    def ler_disponibilidade(self):
+        return super().ler()
+    
+    def atualizar_disponibilidade(self, coluna, novo_valor, id):
+        return super().atualizar(coluna, novo_valor, id)
+    
+    def deletar_disponibilidade(self, id):
+        return super().deletar(id)
+    

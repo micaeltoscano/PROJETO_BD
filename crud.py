@@ -12,8 +12,8 @@ class Crud(Banco):
             #O KWARGS RETORNA UM DICIONARIO {'COLUNA1': 'PARAMETRO1', ... }, ENTÃO USAMOS KEY() PARA PEGAR O NOME DAS COLUNAS E UM ','.JOIN PARA TIRAR OS VALORES DA LISTA
             colunas = ','.join(kwargs.keys()) 
 
-            #PRECISAMOS DOS PLACEHOLDERS %s PARA RECEBER A PASSAGEM DE VALORES, ENTAO MULTIPLICAMOS A %s * QUANTIDADE DE ARGUMENTOS PARA QUE FOSSEM GERADOS PLACEHOLDERS EQUIVALENTES
-            placeholder = ', '.join(['%s']) * len(kwargs) 
+            #PRECISAMOS DOS PLACEHOLDERS %s PARA RECEBER A PASSAGEM DE VALORES, ENTAO MULTIPLICAMOS A %s * QUANTIDADE DE ARGUMENTOS PARA QUE FOSSEM GERADOS PLACEHOLDERS EQUIVALENTES 
+            placeholder = ', '.join(['%s'] * len(kwargs))
 
             #RECEBER OS VALORES DA FUNCAO EM FORMATO DE TUPLA
             valores = tuple(kwargs.values())
@@ -40,7 +40,7 @@ class Crud(Banco):
         
     def atualizar(self, coluna, novo_valor, id):
 
-        if {coluna} not in self.colunas_permitidas:
+        if coluna not in self.colunas_permitidas:
             print(f"Não é possível alterar a coluna: {coluna}")
             return
 
