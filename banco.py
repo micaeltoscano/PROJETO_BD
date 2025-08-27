@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
+
 class Banco:
 
     #construtor para os parâmetros de conexão com o bd
