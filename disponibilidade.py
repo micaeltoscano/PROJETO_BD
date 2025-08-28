@@ -25,7 +25,13 @@ class Disponibilidade(Crud):
         )
 
     def ler_disponibilidade(self):
-        return super().ler()
+        return super().ler_todos()
+    
+    def pesquisar_nome(self, nome):
+        return super().pesquisar_nome(nome)
+    
+    def ler_um_disponibilidade(self, id):
+        return super().listar_um(id)
     
     def atualizar_disponibilidade(self, coluna, novo_valor, id):
         return super().atualizar(coluna, novo_valor, id)

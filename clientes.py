@@ -17,11 +17,17 @@ class Clientes(Crud):
             numero_celular = numero_celular
         )
     
-    def ler_cliente(self):
-        return super().ler()
+    def ler_cliente(self, condicao=None, parametros=None, quantidade=None):
+        return super().ler_todos(condicao, parametros, quantidade)
+    
+    def pesquisar_nome(self, nome):
+        return super().pesquisar_nome(nome) 
+    
+    def ler_um_cliente(self, id):
+        return super().listar_um(id)
     
     def atualizar_cliente(self, coluna, novo_valor, id):
         return super().atualizar(coluna, novo_valor, id)
 
     def deletar_cliente(self, id):
-        return super().deletar_servico(id)
+        return super().deletar(id)

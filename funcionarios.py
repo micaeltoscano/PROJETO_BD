@@ -19,7 +19,13 @@ class Funcionario(Crud):
         )
     
     def ler_funcionario(self):
-        return super().ler()
+        return super().ler_todos()
+    
+    def pesquisar_nome(self, nome):
+        return super().pesquisar_nome(nome) 
+    
+    def ler_um_funcionario(self, id):
+        return super().listar_um(id)
     
     def atualizar_funcionario(self, coluna, novo_valor, id):
         return super().atualizar(coluna, novo_valor, id)

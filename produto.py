@@ -13,11 +13,19 @@ class Produto(Crud):
             tipo = tipo
                          )
     
-    def ler(self):
-        return super().ler()
+    def ler_todos_produtos(self):
+        return super().ler_todos()
+    
+    def pesquisar_nome_produto(self, nome):
+        return super().pesquisar_nome(nome)
+    
+    def ler_um_produto(self, id):
+        return super().listar_um(id)
     
     def atualizar_produto(self, coluna, novo_valor, id):
         return super().atualizar(coluna, novo_valor, id)
     
     def deletar_produto(self, id):
         return super().deletar(id)
+    
+

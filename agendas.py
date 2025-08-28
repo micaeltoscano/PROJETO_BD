@@ -1,9 +1,11 @@
 from crud import Crud
+from pagamentos import Pagamento
+from estoque import Estoque
 
 class Agenda(Crud):
     
     tabela = 'agenda'
-    colunas_permitidas = ['dia', 'horario', 'idfuncionario', 'idservico', 'status'] 
+    colunas_permitidas = ['dia', 'horario', 'idfuncionario', 'idservico', 'status', 'idcliente'] 
     coluna_id = 'idagenda'
 
     def cadastrar_agenda(self, dia, horario, idfuncionario, idservico, idcliente, status='agendado'):
@@ -75,6 +77,12 @@ class Agenda(Crud):
         registros = super().ler()
         colunas = ['idagenda', 'idcliente', 'idfuncionario', 'idservico', 'dia', 'horario', 'status']
         return [dict(zip(colunas, r)) for r in registros]
+    
+    def pesquisar_id(self, nome):
+        return super().pesquisar_nome(nome)
+    
+    def ler_um_agenda(self, id):
+        return super().listar_um(id)
 
     def atualizar_agenda(self, coluna, novo_valor, id):
         return super().atualizar(coluna, novo_valor, id)
@@ -82,13 +90,31 @@ class Agenda(Crud):
     def deletar(self, id):
         return super().deletar(id)
 
-    def confirmar_servico(self, id_agenda):
-        buscar_valor = self.processar(
-            """ SELECT S.VALOR
-                FROM AGENDA A
-                INNER JOIN SERVICO S ON A.IDSERVICO = S.IDSERVICO
-                WHERE A.IDAGENDA = %s """,
-            (id_agenda,), fetch=True
-        )
+    def confirmar_servico(self, id_agenda, metodo_pagamento, idcliente):
+        try:     
+            self.atualizar_agenda("status", "concluido", id_agenda)
 
-        self.atualizar_agenda("status", "concluido", id_agenda)
+            pagamento = Pagamento()
+            pagamento.registrar_pagamento(id_agenda, metodo_pagamento, idcliente)
+
+            id_servico = self.processar(
+                                        """ SELECT IDSERVICO
+                                            FROM AGENDA
+                                            WHERE IDAGENDA = %s """,
+                                            (id_agenda,), fetch=True)
+            if not id_servico:
+                raise ValueError(f"Serviço não encontrado para o agendamento ID {id_agenda}.")
+            
+            id_servico = id_servico[0][0]  
+
+            estoque = Estoque()
+            estoque.atualizar_quantidade(id_servico)
+
+            print(f"Serviço {id_agenda} confirmado com sucesso!")
+
+        except Exception as e:
+            raise ValueError(f"Erro ao confirmar serviço e registrar pagamento: {e}")
+
+            
+
+

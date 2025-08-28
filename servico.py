@@ -15,8 +15,14 @@ class Servico(Crud):
             duracao = duracao
         )
 
-    def ler_servico(self):
-        return super().ler()
+    def ler_todos_servicos(self):
+        return super().ler_todos()
+    
+    def pesquisar_nome(self, nome):
+        return super().pesquisar_nome(nome)
+    
+    def ler_um_servico(self, id):
+        return super().listar_um(id)
     
     def atualizar_servico(self, coluna, novo_valor, id):
         return super().atualizar(coluna, novo_valor, id)
