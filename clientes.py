@@ -3,7 +3,7 @@ from crud import Crud
 class Clientes(Crud):
 
     tabela = 'cliente'
-    colunas_permitidas = ['nome', 'email', 'endereco', 'numero_celular']  
+    colunas_permitidas = ['nome', 'email', 'numero_celular', 'endereco']  
     coluna_id = 'idcliente'
 
     def cadastrar_cliente(self, nome, email, cpf, endereco, numero_celular):
@@ -17,8 +17,8 @@ class Clientes(Crud):
             numero_celular = numero_celular
         )
     
-    def ler_cliente(self, condicao=None, parametros=None, quantidade=None):
-        return super().ler_todos(condicao, parametros, quantidade)
+    def ler_todos_clientes(self):
+        return super().ler_todos()
     
     def pesquisar_nome(self, nome):
         return super().pesquisar_nome(nome) 

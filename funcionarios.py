@@ -18,7 +18,7 @@ class Funcionario(Crud):
             comissao = comissao
         )
     
-    def ler_funcionario(self):
+    def ler_todos_funcionarios(self):
         return super().ler_todos()
     
     def pesquisar_nome(self, nome):

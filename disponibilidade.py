@@ -24,7 +24,7 @@ class Disponibilidade(Crud):
             hora_fim = hora_fim
         )
 
-    def ler_disponibilidade(self):
+    def ler_todas_disponibilidades(self):
         return super().ler_todos()
     
     def pesquisar_nome(self, nome):

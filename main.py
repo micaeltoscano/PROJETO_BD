@@ -4,6 +4,7 @@ from agendas import Agenda
 from disponibilidade import Disponibilidade
 from categoria import Categoria
 from servico import Servico
+from compra import Compra
 
 agenda = Agenda()
 funcionario = Funcionario()
@@ -11,39 +12,44 @@ cliente = Clientes()
 disponibilidade = Disponibilidade()
 categoria = Categoria()
 servico = Servico()
-
-#---------------------serviço---------------------
-#servico.cadastro_servico('Corte de Cabelo', 50.0, 1, 60)
-#print(servico.ler_servico())
-
-#servico.atualizar_servico('valor', 60.0, 1)
-#print(servico.ler_servico())
+compra = Compra()
 
 #---------------------categoria---------------------
-#categoria.cadastro_categoria('cabelo')
-#print(categoria.ler())
+# categoria.cadastro_categoria('cabelo')
+# print(categoria.ler_todas_categorias())
 
 #categoria.atualizar_categoria('nome_categoria', 'barba', 1)
 #print(categoria.ler())
 
+#---------------------serviço---------------------
+# servico.cadastro_servico('Corte de Cabelo', 50.0, 1, 60)
+print(servico.ler_todos_servicos())
+
+#servico.atualizar_servico('valor', 60.0, 1)
+#print(servico.ler_servico())
+
+#---------------------funcionarios---------------------
+#funcionario.cadastrar_funcionario('Hugostoso', 'hugostoso@gmail.com', '12345678900', 'Rua B', '11999999999', 10, 'barbeiro', 0.5)
+print(funcionario.ler_todos_funcionarios())
+
 #---------------------disponibilidade---------------------
-#disponibilidade.cadastro_disponibilidade(6, 'quarta', '09:00', '17:00')
-#print(disponibilidade.ler_disponibilidade())
+# disponibilidade.cadastro_disponibilidade(3, 'quarta', '09:00', '17:00')
+# print(disponibilidade.ler_todas_disponibilidades())
 
 #disponibilidade.atualizar_disponibilidade('hora_fim', '18:00', 1)
 #print(disponibilidade.ler_disponibilidade())
  
 #---------------------cliente---------------------
-#cliente.cadastrar_cliente('Micael', 'micael.toscano@gmail.com', '12345678900', 'Rua A', '11999999999')
-#print(cliente.ler_cliente())
+# cliente.cadastrar_cliente('Micael', 'micael.toscano@gmail.com', '12345678900', 'Rua A', '11999999999')
+print(cliente.ler_todos_clientes())
 
 #cliente.atualizar_cliente('numero_celular', '11988888888', 1)
 
 #print(cliente.ler_cliente())
 
 #---------------------agenda---------------------
-#agenda.cadastrar_agenda('2024-12-25', '10:00', 6, 1, 1)
-#print(agenda.ler_agenda())
+#agenda.cadastrar_agenda('2024-12-25', '10:00', 3, 8, 1)
+print(agenda.ler_agenda())
 
 #agenda.atualizar_agenda('status', 'concluido', 1)
 #print(agenda.ler_agenda())
@@ -82,4 +88,6 @@ servico = Servico()
 # cliente.cadastrar_cliente('Ubirajara Martins', 'ubirajara.martins@yahoo.com', '52863974150', 'Av. Morumbi', '11922221119')
 # cliente.cadastrar_cliente('Vanessa Souza', 'vanessa.souza@gmail.com', '63974185260', 'Rua Vergueiro', '11911110008')
 # cliente.cadastrar_cliente('William Rodrigues', 'william.rodrigues@outlook.com', '74185296370', 'Praça Roosevelt', '11900009997')
+
+#agenda.confirmar_servico(1, 'cartao', 1)
 

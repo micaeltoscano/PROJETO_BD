@@ -31,7 +31,8 @@ class Crud(Banco):
     def ler_todos(self):
         try:
             leitura = self.processar(f"SELECT * FROM {self.tabela} ORDER BY {self.coluna_id}", fetch = True)
-            return leitura
+            colunas = [self.coluna_id] + self.colunas_permitidas 
+            return [dict(zip(colunas, r)) for r in leitura]
         
         except Exception as e:
             print(f"Ocorreu um erro durante o leitura da tabela {self.tabela}: {e}")
