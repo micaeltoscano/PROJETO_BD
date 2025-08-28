@@ -28,10 +28,9 @@ class Pagamento(Crud):
             raise ValueError(f"Erro ao buscar valor do serviço: {e}")
         
         super().cadastro(
-            idcliente = idcliente,
             idagenda = idagenda,
             valor = buscar_valor[0][0],
-            metodo_pagamento = metodo_pagamento
+            forma_pagamento = metodo_pagamento
         )
 
         print("Pagamento registrado com sucesso.")

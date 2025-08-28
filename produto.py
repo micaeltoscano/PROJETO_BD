@@ -7,6 +7,7 @@ class Produto(Crud):
     coluna_id = 'idproduto'
     
     def cadastro_produto(self, valor, nome, tipo):
+        
         super().cadastro(
             valor = valor, 
             nome = nome, 
