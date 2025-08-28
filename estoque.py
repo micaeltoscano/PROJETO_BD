@@ -3,19 +3,18 @@ from crud import Crud
 class Estoque(Crud):
     
     tabela = 'estoque'
-    colunas_permitidas = ['id_produto', 'quantidade_atual', 'quantidade_minima', 'quantidade_maxima']
-    coluna_id = 'idestoque'
+    colunas_permitidas = ['id_produto', 'quantidade_atual', 'quantidade_minima']
+    coluna_id = 'id_estoque'
 
-    def cadastro_estoque(self, id_produto, quantidade_atual, quantidade_minima, quantidade_maxima):
+    def cadastro_estoque(self, id_produto, quantidade_atual, quantidade_minima):
         
         super().cadastro(
             id_produto = id_produto, 
             quantidade_atual = quantidade_atual, 
             quantidade_minima = quantidade_minima, 
-            quantidade_maxima = quantidade_maxima
         )
     
-    def ler_todo_estoque(self):
+    def ler_todos_estoque(self):
        return super().ler_todos()
     
     def pesquisar_nome_estoque(self, nome):
@@ -70,15 +69,28 @@ class Estoque(Crud):
 
         #ATUALIZA O ESTOQUE DE CADA PRODUTO UTILIZADO NO SERVIÇO
         for quantidade, id_produto in pesquisa: #É NECESSÁRIO O FOR, POIS UMA OPERACAO PODE USAR MAIS DE UM PRODUTO
-
-            estoque = self.processar(f"SELECT quantidade_atual FROM {self.tabela} WHERE {self.coluna_id} = %s",
-                                            (id_produto,),fetch=True)
-            if not estoque:
-                raise ValueError("Produto não encontrado no estoque.")
-                
-            estoque_atual = estoque[0][0] + (quantidade * operacao)
-                
-            self.atualizar_estoque('quantidade_atual', estoque_atual, id_produto)
+            
+            #LOCALIZANDO O ID DO ESTOQUE PARA O PRODUTO
+            estoque_info = self.processar(f"""SELECT {self.coluna_id} FROM {self.tabela} 
+                                              WHERE id_produto = %s""", 
+                                             (id_produto,), fetch=True)
+        
+            if not estoque_info:
+                raise ValueError(f"Produto ID {id_produto} não encontrado no estoque.")
+            
+            #LOCALIZANDO O ID DO ESTOQUE PARA O PRODUTO
+            id_estoque = estoque_info[0][0]  
+            
+            quantidade_atual_info = self.processar(f"""SELECT quantidade_atual FROM {self.tabela} 
+                                                    WHERE {self.coluna_id} = %s""",
+                                                (id_estoque,), fetch=True)
+            
+            if not quantidade_atual_info:
+                raise ValueError(f"Estoque ID {id_estoque} não encontrado.")
+            
+            estoque_atual = quantidade_atual_info[0][0] + (quantidade * operacao)
+            
+            self.atualizar_estoque('quantidade_atual', estoque_atual, id_estoque)
 
 
 

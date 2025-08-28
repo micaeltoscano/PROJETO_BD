@@ -64,7 +64,7 @@ class Crud(Banco):
 
         try:
             alteracao = self.processar(
-            f"UPDATE {self.tabela} SET {coluna} = %s WHERE {id} = %s",
+            f"UPDATE {self.tabela} SET {coluna} = %s WHERE {self.coluna_id} = %s",
             (novo_valor, id))
 
             if alteracao == 0:
@@ -76,12 +76,10 @@ class Crud(Banco):
             print(f"Erro ao atualizar {self.tabela}: {e}")
 
     def deletar(self, id):
-
-        try:
         
-            deletar = self.processar(f"DELETE FROM {self.tabela} WHERE {id} = %s", 
+        try:
+            deletar = self.processar(f"DELETE FROM {self.tabela} WHERE {self.coluna_id} = %s", 
                                     (id,))
-
             if deletar == 0:
                 print("Registro não encontrado, nenhum registro foi removido.")
             else:

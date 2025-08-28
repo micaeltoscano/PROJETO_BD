@@ -1,10 +1,11 @@
 from crud import Crud
 
-tabela = "utiliza"
-colunas_permitidas = ['id_servico', 'id_produto', 'quantidade']
-coluna_id = 'idutiliza'
-
 class Utiliza(Crud):
+
+    tabela = "utiliza"
+    colunas_permitidas = ['id_servico', 'id_produto', 'quantidade']
+    coluna_id = 'id_utiliza'
+
     
     def cadastro_utiliza(self, id_servico, id_produto, quantidade):
         super().cadastro(
