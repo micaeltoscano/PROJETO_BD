@@ -17,6 +17,7 @@ class Pagamento(Crud):
     
     def registrar_pagamento_servico(self, idagenda, metodo_pagamento):
         try:
+            #FAZ UMA CONSULTA PARA BUSCAR O VALOR DO SERVICO
             buscar_valor = self.processar(
                                         """ SELECT S.VALOR
                                             FROM AGENDA A
@@ -29,6 +30,7 @@ class Pagamento(Crud):
         except Exception as e:
             raise ValueError(f"Erro ao buscar valor do serviço: {e}")
         
+        #CADASTRA NA TABELA DE PAGAMENTOS
         super().cadastro(
             id_agenda=idagenda,
             id_compra = None,

@@ -7,8 +7,7 @@ class Clientes(Crud):
     coluna_id = 'idcliente'
 
     def cadastrar_cliente(self, nome, email, cpf, endereco, numero_celular):
-
-        #SUPER() É TIPO AQUELE :: DO C++, QUE ACESSA ATRIBUTOS E METODOS DA CLASSE MAE A PARTIR DE UMA CLASSE FILHA
+        
         super().cadastro(
             nome = nome,
             email = email,

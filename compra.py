@@ -22,24 +22,29 @@ class Compra(Crud):
         
         estoque = Estoque()
         pagamento = Pagamento()
+        itens = Itens_compra()
         
-        #FALTA COLOCAR NO SCRIPT DO BD OS ATRIBUTOS METODO_PAGAMENTO E IDCLIENTE NA TABELA COMPRA
+        #FAZ UM CADASTRO INICIAL PARA CRIAR UM ID
         super().cadastro(valor_total=0)
-        print(self.ler_todas_compras())
-        #PEGA O ULTIMO ID INSERIDO
+
+        #USA FUNCAO MAX PARA BUSCAR O ÚLTIMO ID INSERIDO
         id_compra = self.processar("SELECT MAX(idcompra) FROM compra", fetch=True)[0][0]
 
-        itens = Itens_compra()
+        #CHAMA A FUNCAO DE RECEBER OS ITENS DA COMPRA
         itens.receber_produtos(id_compra)
 
+        #CALCULA O TOTAL DA COMPRA
         total_compra = self.processar(
                                     "SELECT SUM(valor_total_item) FROM itens_compra WHERE id_compra = %s",
                                     (id_compra,), fetch=True)[0][0]
 
+        #ATUALIZA A TABELA DE COMPRA COM O VALOR TOTAL REALIZADO NA COMPRA
         self.atualizar_compra('valor_total', total_compra, id_compra)
 
+        #REGISTRA O PAGAMENTO NA TABELA DE PAGAMENTOS
         pagamento.registrar_pagamento_produto(id_compra, metodo_pagamento)
-    
+
+        #ATUALIZA O ESTOQUE
         estoque.atualizar_quantidade('venda', id_compra)
 
         print(f"Compra {id_compra} registrada com sucesso! Total: {total_compra}")

@@ -10,7 +10,7 @@ class Agenda(Crud):
 
     def cadastrar_agenda(self, dia, horario, id_funcionario, id_servico, id_cliente, status='agendado'):
 
-        # Verifica se o funcionário está disponível no dia
+        #VERIFICAR A DISPONIBILIDADE DO FUNCIONARIO NO DIA
         disponibilidade_dia = self.processar(
                                             """ SELECT 1 
                                                 FROM disponibilidade 
@@ -22,7 +22,7 @@ class Agenda(Crud):
         if not disponibilidade_dia:
             raise ValueError(f"O funcionário de ID {id_funcionario} não está disponível no dia {dia} no horário {horario}")
 
-        # Verifica se já há um agendamento
+        #VERIFICA SE JÁ HÁ UM AGENDAMENTO PARA O FUNCIONARIO NAQUELE DIA E HORARIO
         jaagendado = self.processar(
                                     """ SELECT 1 
                                         FROM agenda 
@@ -33,7 +33,7 @@ class Agenda(Crud):
         if jaagendado:
             raise ValueError(f"O funcionário de ID {id_funcionario} já tem um agendamento no dia {dia} no horário {horario}")
 
-        # Pega a duração do serviço pelo ID
+        #CONSULTA PARA VER A DURACAO DO SERVICO
         resultado = self.processar(
                                     """ SELECT DURACAO
                                         FROM SERVICO
@@ -46,7 +46,7 @@ class Agenda(Crud):
 
         duracao_servico = resultado[0][0]
 
-        # Verifica conflitos de horário com outros agendamentos
+        #CONSULTA PARA VERIFICAR SE A DURACAO DO SERVICO INTERFERE NA DURAÇÃO DE OUTROS SERVICOS
         indisponibilidade_horario = self.processar(
                                                     """ SELECT 1
                                                         FROM agenda a
@@ -64,7 +64,7 @@ class Agenda(Crud):
         if indisponibilidade_horario:
             raise ValueError("Horário indisponível, por haver conflito com outro agendamento.")
 
-        # Cadastro do agendamento
+        #CADASTRO NA TABELA DE AGENDA
         super().cadastro(
         dia=dia,
         horario=horario,
@@ -74,6 +74,7 @@ class Agenda(Crud):
         status=status
     )
 
+    #FUNCOES DE LEITURA:
     def ler_toda_agenda(self):
         return super().ler_todos()
     
@@ -83,16 +84,21 @@ class Agenda(Crud):
     def ler_um_agenda(self, id):
         return super().listar_um(id)
 
+    #FUNCAO PARA ATUALIZAÇÃO
     def atualizar_agenda(self, coluna, novo_valor, id):
         return super().atualizar(coluna, novo_valor, id)
 
+    #FUNCAO DE DELEÇÃO
     def deletar(self, id):
         return super().deletar(id)
 
+    #FUNCAO PARA CONFIRMAR O ENCERRAMENTO DO SERVICO
     def confirmar_servico(self, id_agenda, metodo_pagamento):
         try:     
+            #ATUALIZA O STATUS DA AGENDA PARA CONCLUIDO
             self.atualizar_agenda("status", "concluido", id_agenda)
 
+            #REGISTRA UM PAGAMENTO NA TABELA DE PAGAMENTOS
             pagamento = Pagamento()
             pagamento.registrar_pagamento_servico(id_agenda, metodo_pagamento)
 
@@ -105,11 +111,11 @@ class Agenda(Crud):
             if not consulta:
                 raise ValueError(f"Serviço não encontrado para o agendamento ID {id_agenda}.")
             
+            #COM O ID, ATUALIZA O ESTOQUE COM A QUANTIDADE DE PRODUTOS QUE FORAM USADOS DURANTE O SERVICO
             id_servico = consulta[0][0]
-
             estoque = Estoque()
             estoque.atualizar_quantidade(origem='servico', id_origem=id_servico) 
-
+            
             print(f"Serviço {id_agenda} confirmado com sucesso!")
 
         except Exception as e:
