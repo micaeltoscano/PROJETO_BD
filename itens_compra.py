@@ -3,8 +3,8 @@ from crud import Crud
 class Itens_compra(Crud):
 
     tabela = 'itens_compra'
-    colunas_permitidas = ['id_compra', 'idproduto', 'quantidade', 'valor_unitario', 'valor_total_item']
-    coluna_id = 'id_itens_compra'
+    colunas_permitidas = ['id_compra', 'id_produto', 'quantidade', 'valor_unitario', 'valor_total_item']
+    coluna_id = 'iditenscompra'
 
     def receber_produtos(self, idcompra):
         condicao = True

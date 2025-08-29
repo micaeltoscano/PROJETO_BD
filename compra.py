@@ -26,7 +26,7 @@ class Compra(Crud):
         #FALTA COLOCAR NO SCRIPT DO BD OS ATRIBUTOS METODO_PAGAMENTO E IDCLIENTE NA TABELA COMPRA
         super().cadastro(valor_total=0)
 
-        #Pega o último ID_COMPRA inserido
+        #PEGA O ULTIMO ID INSERIDO
         id_compra = self.processar("SELECT MAX(id_compra) FROM compra", fetch=True)[0][0]
 
         itens = Itens_compra()

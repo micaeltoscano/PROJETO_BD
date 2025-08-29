@@ -3,7 +3,7 @@ from crud import Crud
 class Pagamento(Crud):
 
     tabela = 'pagamento'
-    colunas_permitidas = ['idcliente', 'idagenda', 'valor', 'data_pagamento', 'metodo_pagamento']
+    colunas_permitidas = ['id_agenda', 'id_venda', 'valor', 'forma_pagamento', 'data_pagamento', 'status']
     coluna_id = 'idpagamento'
     
     def ler_todos_pagamentos(self):
@@ -15,7 +15,7 @@ class Pagamento(Crud):
     def deletar_pagamento(self, id):
         return super().deletar(id)
     
-    def registrar_pagamento_servico(self, idagenda, metodo_pagamento, idcliente):
+    def registrar_pagamento_servico(self, idagenda, metodo_pagamento):
         try:
             buscar_valor = self.processar(
                                         """ SELECT S.VALOR
@@ -28,7 +28,7 @@ class Pagamento(Crud):
             raise ValueError(f"Erro ao buscar valor do serviço: {e}")
         
         super().cadastro(
-            idagenda = idagenda,
+            id_agenda = idagenda,
             valor = buscar_valor[0][0],
             forma_pagamento = metodo_pagamento
         )
@@ -36,7 +36,7 @@ class Pagamento(Crud):
         print("Pagamento registrado com sucesso.")
 
     #UNIFICAR AS DUAS FUNCOES EM UMA SÓ (NAO FIZ AGORA -- PREGUICA)
-    def registrar_pagamento_produto(self, id_compra, metodo_pagamento, idcliente):
+    def registrar_pagamento_produto(self, id_compra, metodo_pagamento):
         try:
     
             buscar_valor = self.processar(
@@ -53,10 +53,9 @@ class Pagamento(Crud):
         valor_total = buscar_valor[0][0]
             
         super().cadastro(
-            id_compra=id_compra,
-            valor=valor_total,
-            forma_pagamento=metodo_pagamento,
-            idcliente=idcliente
+            id_compra = id_compra,
+            valor = valor_total,
+            forma_pagamento = metodo_pagamento
             )
 
         print("Pagamento de produtos registrado com sucesso.")        

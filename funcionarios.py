@@ -3,10 +3,10 @@ from crud import Crud
 class Funcionario(Crud):
 
     tabela = 'funcionario'
-    colunas_permitidas = ['nome', 'email', 'cpf', 'endereco', 'numero_celular', 'salario', 'especialidade', 'comissao']
+    colunas_permitidas = ['nome', 'email', 'cpf', 'endereco', 'numero_celular', 'salario', 'especialidade']
     coluna_id = 'idfuncionario'
 
-    def cadastrar_funcionario(self, nome, email, cpf, endereco, numero_celular, salario, especialidade, comissao):
+    def cadastrar_funcionario(self, nome, email, cpf, endereco, numero_celular, salario, especialidade):
         super().cadastro(
             nome = nome,
             email = email, 
@@ -15,7 +15,6 @@ class Funcionario(Crud):
             numero_celular = numero_celular,
             salario = salario,
             especialidade = especialidade,
-            comissao = comissao
         )
     
     def ler_todos_funcionarios(self):

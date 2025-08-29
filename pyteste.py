@@ -27,50 +27,41 @@ compra = Compra()
 itenscompra = Itens_compra()
 
 #---------------------categoria---------------------
-# categoria.cadastro_categoria('cabelo')
-# print(categoria.ler_todas_categorias())
+categoria.cadastro_categoria('cabelo')
+print(categoria.ler_todas_categorias())
 
-# categoria.atualizar_categoria('nome_categoria', 'barba', 1)
-# print(categoria.ler())
 
 #---------------------serviço---------------------
-# servico.cadastro_servico('Corte de Cabelo', 50.0, 1, 60)
-# print(servico.ler_todos_servicos())
-
-#servico.atualizar_servico('valor', 60.0, 1)
-#print(servico.ler_servico())
+servico.cadastro_servico('Corte de Cabelo', 50.0, 1, 60)
+print(servico.ler_todos_servicos())
 
 #---------------------funcionarios---------------------
-# funcionario.cadastrar_funcionario('Hugostoso', 'hugostoso@gmail.com', '12345678900', 'Rua B', '11999999999', 10, 'barbeiro', 0.5)
-# print(funcionario.ler_todos_funcionarios())
+funcionario.cadastrar_funcionario('Hugostoso', 'hugostoso@gmail.com', '12345678900', 'Rua B', '11999999999', 10, 'barbeiro')
+print(funcionario.ler_todos_funcionarios())
 
 #---------------------disponibilidade---------------------
-# disponibilidade.cadastro_disponibilidade(1, 'quarta', '09:00', '17:00')
-# print(disponibilidade.ler_todas_disponibilidades())
-
-#disponibilidade.atualizar_disponibilidade('hora_fim', '18:00', 1)
-#print(disponibilidade.ler_disponibilidade())
- 
+disponibilidade.cadastro_disponibilidade(1, 'quarta', '09:00', '17:00')
+print(disponibilidade.ler_todas_disponibilidades())
 
 #---------------------produto---------------------
-# produto.cadastro_produto(5, 'Navalha', 'acessorios')
-# produto.cadastro_produto(50, 'Shampoo', 'higiene')
-# print(produto.ler_todos_produtos())
+produto.cadastro_produto(5, 'Navalha', 'acessorios')
+produto.cadastro_produto(50, 'Shampoo', 'higiene')
+print(produto.ler_todos_produtos())
 
 #---------------------UTILIZA---------------------
 #PROBLEMA: CADASTRO DUPLICADO DE SERVICO QUE USA O MESMO PRODUTO
 
-# utiliza.cadastro_utiliza(1, 2, 1)
-# print(utiliza.ler_todos_utiliza())
+utiliza.cadastro_utiliza(1, 2, 1)
+print(utiliza.ler_todos_utiliza())
 
 #--------------------ESTOQUE---------------------
-# estoque.cadastro_estoque(1,100,0)
-# estoque.cadastro_estoque(2,50,0)
-# print(estoque.ler_todo_estoque())
+estoque.cadastro_estoque(1,100,0)
+estoque.cadastro_estoque(2,50,0)
+print(estoque.ler_todo_estoque())
 
 #---------------------agenda---------------------
-# agenda.cadastrar_agenda('2024-12-25', '10:00', 1, 1, 1)
-# print(agenda.ler_agenda())
+agenda.cadastrar_agenda('2024-12-25', '10:00', 1, 1, 1)
+print(agenda.ler_agenda())
 
 #agenda.atualizar_agenda('status', 'concluido', 1)
 #print(agenda.ler_agenda())

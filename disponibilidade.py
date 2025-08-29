@@ -6,19 +6,19 @@ class Disponibilidade(Crud):
     colunas_permitidas = ['id_funcionario', 'dia_semana', 'hora_inicio', 'hora_fim']
     coluna_id = 'id'
 
-    def cadastro_disponibilidade(self, funcionario_id, dia_semana, hora_inicio, hora_fim):
+    def cadastro_disponibilidade(self,  id_funcionario, dia_semana, hora_inicio, hora_fim):
 
         jacadastrado = self.processar(
                                         """SELECT 1 
                                         FROM disponibilidade 
-                                        WHERE funcionario_id = %s AND dia_semana = %s AND hora_inicio = %s AND hora_fim = %s""",
-                                        (funcionario_id, dia_semana, hora_inicio, hora_fim), fetch=True)
+                                        WHERE  id_funcionario = %s AND dia_semana = %s AND hora_inicio = %s AND hora_fim = %s""",
+                                        ( id_funcionario, dia_semana, hora_inicio, hora_fim), fetch=True)
         if jacadastrado:
                 print("Disponibilidade já cadastrada para esse funcionário nesse horário.")
                 return
         
         super().cadastro(
-            funcionario_id = funcionario_id,
+            id_funcionario =  id_funcionario,
             dia_semana = dia_semana,
             hora_inicio = hora_inicio,
             hora_fim = hora_fim
