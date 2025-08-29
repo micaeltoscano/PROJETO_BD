@@ -5,76 +5,77 @@ from estoque import Estoque
 class Agenda(Crud):
     
     tabela = 'agenda'
-    colunas_permitidas = ['dia', 'horario', 'id_funcionario', 'idservico', 'status', 'idcliente'] 
+    colunas_permitidas = ['id_cliente', 'id_funcionario', 'id_servico', 'dia', 'horario', 'status'] 
     coluna_id = 'idagenda'
 
-    def cadastrar_agenda(self, dia, horario, idfuncionario, idservico, idcliente, status='agendado'):
+    def cadastrar_agenda(self, dia, horario, id_funcionario, id_servico, id_cliente, status='agendado'):
 
-        # Verifica se o funcionário está disponível no dia
+        #VERIFICAR A DISPONIBILIDADE DO FUNCIONARIO NO DIA
         disponibilidade_dia = self.processar(
                                             """ SELECT 1 
                                                 FROM disponibilidade 
-                                                WHERE funcionario_id = %s AND %s BETWEEN hora_inicio AND hora_fim""",
-                                            (idfuncionario, horario),
+                                                WHERE id_funcionario = %s AND %s BETWEEN hora_inicio AND hora_fim""",
+                                            (id_funcionario, horario),
                                             fetch=True
                                         )
 
         if not disponibilidade_dia:
-            raise ValueError(f"O funcionário de ID {idfuncionario} não está disponível no dia {dia} no horário {horario}")
+            raise ValueError(f"O funcionário de ID {id_funcionario} não está disponível no dia {dia} no horário {horario}")
 
-        # Verifica se já há um agendamento
+        #VERIFICA SE JÁ HÁ UM AGENDAMENTO PARA O FUNCIONARIO NAQUELE DIA E HORARIO
         jaagendado = self.processar(
                                     """ SELECT 1 
                                         FROM agenda 
-                                        WHERE dia = %s AND horario = %s AND idfuncionario = %s""",
-                                    (dia, horario, idfuncionario),
+                                        WHERE dia = %s AND horario = %s AND id_funcionario = %s""",
+                                    (dia, horario, id_funcionario),
                                     fetch=True
                                 )
         if jaagendado:
-            raise ValueError(f"O funcionário de ID {idfuncionario} já tem um agendamento no dia {dia} no horário {horario}")
+            raise ValueError(f"O funcionário de ID {id_funcionario} já tem um agendamento no dia {dia} no horário {horario}")
 
-        # Pega a duração do serviço pelo ID
+        #CONSULTA PARA VER A DURACAO DO SERVICO
         resultado = self.processar(
                                     """ SELECT DURACAO
                                         FROM SERVICO
                                         WHERE IDSERVICO = %s """,
-                                    (idservico,), fetch=True
+                                    (id_servico,), fetch=True
                                 )
 
         if not resultado:
-            raise ValueError(f"Serviço de ID {idservico} não encontrado.")
+            raise ValueError(f"Serviço de ID {id_servico} não encontrado.")
 
         duracao_servico = resultado[0][0]
 
-        # Verifica conflitos de horário com outros agendamentos
+        #CONSULTA PARA VERIFICAR SE A DURACAO DO SERVICO INTERFERE NA DURAÇÃO DE OUTROS SERVICOS
         indisponibilidade_horario = self.processar(
                                                     """ SELECT 1
                                                         FROM agenda a
-                                                        JOIN servico s ON a.idservico = s.idservico
-                                                        WHERE a.idfuncionario = %s
+                                                        JOIN servico s ON a.id_servico = s.idservico
+                                                        WHERE a.id_funcionario = %s
                                                         AND a.dia = %s
                                                         AND NOT (
                                                             %s + interval '%s minute' <= a.horario
                                                             OR %s >= a.horario + s.duracao * interval '1 minute'
                                                         )""",
-                                                    (idfuncionario, dia, horario, duracao_servico, horario),
+                                                    (id_funcionario, dia, horario, duracao_servico, horario),
                                                     fetch=True
                                                 )
 
         if indisponibilidade_horario:
             raise ValueError("Horário indisponível, por haver conflito com outro agendamento.")
 
-        # Cadastro do agendamento
+        #CADASTRO NA TABELA DE AGENDA
         super().cadastro(
         dia=dia,
         horario=horario,
-        idfuncionario=idfuncionario,
-        idservico=idservico,
-        idcliente=idcliente,
+        id_funcionario=id_funcionario,
+        id_servico=id_servico,
+        id_cliente=id_cliente,
         status=status
     )
 
-    def ler_agenda(self):
+    #FUNCOES DE LEITURA:
+    def ler_toda_agenda(self):
         return super().ler_todos()
     
     def pesquisar_id(self, nome):
@@ -83,33 +84,38 @@ class Agenda(Crud):
     def ler_um_agenda(self, id):
         return super().listar_um(id)
 
+    #FUNCAO PARA ATUALIZAÇÃO
     def atualizar_agenda(self, coluna, novo_valor, id):
         return super().atualizar(coluna, novo_valor, id)
 
+    #FUNCAO DE DELEÇÃO
     def deletar(self, id):
         return super().deletar(id)
 
-    def confirmar_servico(self, id_agenda, metodo_pagamento, idcliente):
+    #FUNCAO PARA CONFIRMAR O ENCERRAMENTO DO SERVICO
+    def confirmar_servico(self, id_agenda, metodo_pagamento):
         try:     
+            #ATUALIZA O STATUS DA AGENDA PARA CONCLUIDO
             self.atualizar_agenda("status", "concluido", id_agenda)
 
+            #REGISTRA UM PAGAMENTO NA TABELA DE PAGAMENTOS
             pagamento = Pagamento()
-            pagamento.registrar_pagamento(id_agenda, metodo_pagamento, idcliente)
+            pagamento.registrar_pagamento_servico(id_agenda, metodo_pagamento)
 
             #CONSULTA PARA BUSCAR O ID DO SERVIÇO ASSOCIADO AO AGENDAMENTO
             consulta = self.processar(
-                                        """ SELECT IDSERVICO
+                                        """ SELECT ID_SERVICO
                                             FROM AGENDA
                                             WHERE IDAGENDA = %s """,
                                             (id_agenda,), fetch=True)
             if not consulta:
                 raise ValueError(f"Serviço não encontrado para o agendamento ID {id_agenda}.")
             
-            id_servico = consulta[0][0] 
-
+            #COM O ID, ATUALIZA O ESTOQUE COM A QUANTIDADE DE PRODUTOS QUE FORAM USADOS DURANTE O SERVICO
+            id_servico = consulta[0][0]
             estoque = Estoque()
             estoque.atualizar_quantidade(origem='servico', id_origem=id_servico) 
-
+            
             print(f"Serviço {id_agenda} confirmado com sucesso!")
 
         except Exception as e:
