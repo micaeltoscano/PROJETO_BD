@@ -4,7 +4,7 @@ class Disponibilidade(Crud):
 
     tabela = "disponibilidade"
     colunas_permitidas = ['id_funcionario', 'dia_semana', 'hora_inicio', 'hora_fim']
-    coluna_id = 'id'
+    coluna_id = 'iddisponibilidade'
 
     def cadastro_disponibilidade(self,  id_funcionario, dia_semana, hora_inicio, hora_fim):
 
@@ -30,8 +30,8 @@ class Disponibilidade(Crud):
     def pesquisar_nome(self, nome):
         return super().pesquisar_nome(nome)
     
-    def ler_um_disponibilidade(self, id):
-        return super().listar_um(id)
+    def ler_um_disponibilidade(self, coluna_id):
+        return super().listar_um(coluna_id)
     
     def atualizar_disponibilidade(self, coluna, novo_valor, id):
         return super().atualizar(coluna, novo_valor, id)

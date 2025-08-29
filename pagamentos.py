@@ -20,17 +20,21 @@ class Pagamento(Crud):
             buscar_valor = self.processar(
                                         """ SELECT S.VALOR
                                             FROM AGENDA A
-                                            INNER JOIN SERVICO S ON A.IDSERVICO = S.IDSERVICO
+                                            INNER JOIN SERVICO S ON A.ID_SERVICO = S.IDSERVICO
                                             WHERE A.IDAGENDA = %s """,
                                             (idagenda,), fetch=True)
+            if not buscar_valor:  
+                raise ValueError(f"Nenhum valor encontrado para a agenda {idagenda}")
             
         except Exception as e:
             raise ValueError(f"Erro ao buscar valor do serviço: {e}")
         
         super().cadastro(
-            id_agenda = idagenda,
-            valor = buscar_valor[0][0],
-            forma_pagamento = metodo_pagamento
+            id_agenda=idagenda,
+            id_compra = None,
+            valor=buscar_valor[0][0],
+            forma_pagamento=metodo_pagamento,
+            status='APROVADO',
         )
 
         print("Pagamento registrado com sucesso.")
@@ -53,9 +57,11 @@ class Pagamento(Crud):
         valor_total = buscar_valor[0][0]
             
         super().cadastro(
+            id_agenda=None,
             id_compra = id_compra,
-            valor = valor_total,
-            forma_pagamento = metodo_pagamento
+            valor=valor_total,
+            forma_pagamento=metodo_pagamento,
+            status='APROVADO',
             )
 
         print("Pagamento de produtos registrado com sucesso.")        

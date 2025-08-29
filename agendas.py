@@ -89,12 +89,12 @@ class Agenda(Crud):
     def deletar(self, id):
         return super().deletar(id)
 
-    def confirmar_servico(self, id_agenda, metodo_pagamento, idcliente):
+    def confirmar_servico(self, id_agenda, metodo_pagamento):
         try:     
             self.atualizar_agenda("status", "concluido", id_agenda)
 
             pagamento = Pagamento()
-            pagamento.registrar_pagamento_servico(id_agenda, metodo_pagamento, idcliente)
+            pagamento.registrar_pagamento_servico(id_agenda, metodo_pagamento)
 
             #CONSULTA PARA BUSCAR O ID DO SERVIÇO ASSOCIADO AO AGENDAMENTO
             consulta = self.processar(
@@ -105,7 +105,7 @@ class Agenda(Crud):
             if not consulta:
                 raise ValueError(f"Serviço não encontrado para o agendamento ID {id_agenda}.")
             
-            id_servico = consulta[0][0] 
+            id_servico = consulta[0][0]
 
             estoque = Estoque()
             estoque.atualizar_quantidade(origem='servico', id_origem=id_servico) 

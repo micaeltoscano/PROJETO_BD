@@ -6,7 +6,7 @@ from pagamentos import Pagamento
 class Compra(Crud):
     tabela = 'compra'
     colunas_permitidas = ['data_compra', 'valor_total']
-    coluna_id = 'id_compra'
+    coluna_id = 'idcompra'
     
     def ler_todas_compras(self):
         return super().ler_todos()
@@ -18,16 +18,16 @@ class Compra(Crud):
         return super().deletar(id)
     
 
-    def registrar_compra(self, metodo_pagamento, idcliente):
+    def registrar_compra(self, metodo_pagamento):
         
         estoque = Estoque()
         pagamento = Pagamento()
         
         #FALTA COLOCAR NO SCRIPT DO BD OS ATRIBUTOS METODO_PAGAMENTO E IDCLIENTE NA TABELA COMPRA
         super().cadastro(valor_total=0)
-
+        print(self.ler_todas_compras())
         #PEGA O ULTIMO ID INSERIDO
-        id_compra = self.processar("SELECT MAX(id_compra) FROM compra", fetch=True)[0][0]
+        id_compra = self.processar("SELECT MAX(idcompra) FROM compra", fetch=True)[0][0]
 
         itens = Itens_compra()
         itens.receber_produtos(id_compra)
@@ -38,7 +38,7 @@ class Compra(Crud):
 
         self.atualizar_compra('valor_total', total_compra, id_compra)
 
-        pagamento.registrar_pagamento_produto(id_compra, metodo_pagamento, idcliente)
+        pagamento.registrar_pagamento_produto(id_compra, metodo_pagamento)
     
         estoque.atualizar_quantidade('venda', id_compra)
 
