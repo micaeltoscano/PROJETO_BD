@@ -15,7 +15,7 @@ class Pagamento(Crud):
     def deletar_pagamento(self, id):
         return super().deletar(id)
     
-    def registrar_pagamento(self, idagenda, metodo_pagamento, idcliente):
+    def registrar_pagamento_servico(self, idagenda, metodo_pagamento, idcliente):
         try:
             buscar_valor = self.processar(
                                         """ SELECT S.VALOR

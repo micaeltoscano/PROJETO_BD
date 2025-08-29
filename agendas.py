@@ -94,7 +94,7 @@ class Agenda(Crud):
             self.atualizar_agenda("status", "concluido", id_agenda)
 
             pagamento = Pagamento()
-            pagamento.registrar_pagamento(id_agenda, metodo_pagamento, idcliente)
+            pagamento.registrar_pagamento_servico(id_agenda, metodo_pagamento, idcliente)
 
             #CONSULTA PARA BUSCAR O ID DO SERVIÇO ASSOCIADO AO AGENDAMENTO
             consulta = self.processar(
