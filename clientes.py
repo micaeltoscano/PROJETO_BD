@@ -3,7 +3,7 @@ from crud import Crud
 class Clientes(Crud):
 
     tabela = 'cliente'
-    colunas_permitidas = ['nome', 'email', 'numero_celular', 'endereco']  
+    colunas_permitidas = ['nome', 'email', 'cpf', 'endereco', 'numero_celular']  
     coluna_id = 'idcliente'
 
     def cadastrar_cliente(self, nome, email, cpf, endereco, numero_celular):

@@ -1,10 +1,11 @@
 from crud import Crud
 from itens_compra import Itens_compra
 from estoque import Estoque
+from pagamentos import Pagamento
 
 class Compra(Crud):
     tabela = 'compra'
-    colunas_permitidas = ['idproduto', 'data_compra', 'valor_total']
+    colunas_permitidas = ['data_compra', 'valor_total']
     coluna_id = 'id_compra'
     
     def ler_todas_compras(self):
@@ -17,9 +18,12 @@ class Compra(Crud):
         return super().deletar(id)
     
 
-    def registrar_compra(self):
+    def registrar_compra(self, metodo_pagamento, idcliente):
         
         estoque = Estoque()
+        pagamento = Pagamento()
+        
+        #FALTA COLOCAR NO SCRIPT DO BD OS ATRIBUTOS METODO_PAGAMENTO E IDCLIENTE NA TABELA COMPRA
         super().cadastro(valor_total=0)
 
         #Pega o último ID_COMPRA inserido
@@ -33,6 +37,8 @@ class Compra(Crud):
                                     (id_compra,), fetch=True)[0][0]
 
         self.atualizar_compra('valor_total', total_compra, id_compra)
+
+        pagamento.registrar_pagamento_produto(id_compra, metodo_pagamento, idcliente)
     
         estoque.atualizar_quantidade('venda', id_compra)
 

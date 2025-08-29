@@ -5,7 +5,7 @@ from estoque import Estoque
 class Agenda(Crud):
     
     tabela = 'agenda'
-    colunas_permitidas = ['dia', 'horario', 'id_funcionario', 'idservico', 'status', 'idcliente'] 
+    colunas_permitidas = ['idcliente', 'id_funcionario', 'idservico', 'dia', 'horario', 'status', 'idcliente'] 
     coluna_id = 'idagenda'
 
     def cadastrar_agenda(self, dia, horario, idfuncionario, idservico, idcliente, status='agendado'):
@@ -74,7 +74,7 @@ class Agenda(Crud):
         status=status
     )
 
-    def ler_agenda(self):
+    def ler_toda_agenda(self):
         return super().ler_todos()
     
     def pesquisar_id(self, nome):

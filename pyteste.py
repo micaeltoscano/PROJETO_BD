@@ -51,13 +51,6 @@ itenscompra = Itens_compra()
 #disponibilidade.atualizar_disponibilidade('hora_fim', '18:00', 1)
 #print(disponibilidade.ler_disponibilidade())
  
-#---------------------cliente---------------------
-# cliente.cadastrar_cliente('Micael', 'micael.toscano@gmail.com', '12345678900', 'Rua A', '11999999999')
-# print(cliente.ler_todos_clientes())
-
-#cliente.atualizar_cliente('numero_celular', '11988888888', 1)
-
-#print(cliente.ler_cliente())
 
 #---------------------produto---------------------
 # produto.cadastro_produto(5, 'Navalha', 'acessorios')
@@ -118,4 +111,144 @@ itenscompra = Itens_compra()
 
 #compra.registrar_compra()
 
-print(estoque.ler_todo_estoque())
+#print(estoque.ler_todo_estoque())
+
+#--------------------- TESTES COM CLIENTES ---------------------
+
+# cliente.cadastrar_cliente('Ana Silva', 'ana.silva@hotmail.com', '98765432100', 'Av. Paulista', '11988887777')
+# cliente.cadastrar_cliente('Carlos Santos', 'carlos.santos@yahoo.com', '45678912300', 'Rua das Flores', '11977776666')
+# cliente.cadastrar_cliente('Maria Oliveira', 'maria.oliveira@gmail.com', '32165498700', 'Travessa da Paz', '11966665555')
+
+#TESTE DA LEITURA DE TODOS OS CLIENTES:
+
+    # for n in (cliente.ler_todos_clientes()): 
+    #     print(n)
+
+    #RETORNO DA EXECUÇÃO:
+
+    # {'idcliente': 1, 'nome': 'Micael', 'email': 'micael.toscano@gmail.com', 'cpf': '12345678900', 'endereco': 'Rua A', 'numero_celular': '11999999999'}
+    # {'idcliente': 3, 'nome': 'Ana Silva', 'email': 'ana.silva@hotmail.com', 'cpf': '98765432100', 'endereco': 'Av. Paulista', 'numero_celular': '11988887777'}
+    # {'idcliente': 4, 'nome': 'Carlos Santos', 'email': 'carlos.santos@yahoo.com', 'cpf': '45678912300', 'endereco': 'Rua das Flores', 'numero_celular': '11977776666'}
+    # {'idcliente': 5, 'nome': 'Maria Oliveira', 'email': 'maria.oliveira@gmail.com', 'cpf': '32165498700', 'endereco': 'Travessa da Paz', 'numero_celular': '11966665555'}
+
+#TESTE DA PESQUISA PELO NOME DO CLIENTE:
+
+    #print(cliente.pesquisar_nome('Micael'))
+
+    #RETORNO DA EXECUÇÃO:
+    #[(1, 'Micael', 'micael.toscano@gmail.com', '12345678900', 'Rua A', '11999999999')]
+
+#TESTE DE LEITURA DE UM CLIENTE PELO ID:
+
+    #print(cliente.ler_um_cliente(3))
+
+    #RETORNO DA EXECUÇÃO:
+
+    #[(3, 'Ana Silva', 'ana.silva@hotmail.com', '98765432100', 'Av. Paulista', '11988887777')]
+
+#TESTE DE ATUALIZAÇÃO DE UM CLIENTE:
+
+    # cliente.atualizar_cliente('nome', 'hugostoso', 3)
+    # print(cliente.ler_um_cliente(3))
+
+    #RETORNO DA EXECUÇÃO:
+
+    #[(3, 'hugostoso', 'ana.silva@hotmail.com', '98765432100', 'Av. Paulista', '11988887777')]
+
+#TESTE DE DELEÇÃO DE UM CLIENTE:
+
+    #cliente.deletar_cliente(3)
+    #print(cliente.ler_um_cliente(3))
+
+    #RETORNO DA EXECUÇÃO:
+    #[]
+
+#--------------------- TESTES COM PRODUTOS ---------------------
+
+#TESTE DE CADASTRO DE PRODUTOS:
+
+    # produto.cadastro_produto(50,'condicionador', 'higiene')
+    # for n in produto.ler_todos_produtos():
+    #     print(n)
+
+    #RETORNO DA EXECUÇÃO:
+    # {'idproduto': 1, 'valor': 'Navalha', 'nome': Decimal('5.00'), 'tipo': 'acessorios'}
+    # {'idproduto': 2, 'valor': 'Shampoo', 'nome': Decimal('50.00'), 'tipo': 'higiene'}
+    # {'idproduto': 6, 'valor': 'condicionador', 'nome': Decimal('50.00'), 'tipo': 'higiene'}
+
+    #PROBLEMAS:
+    # produto.cadastro_produto(50,'Condicionador', 'higiene')
+    # for n in produto.ler_todos_produtos():
+    #     print(n)
+    # {'idproduto': 1, 'valor': 'Navalha', 'nome': Decimal('5.00'), 'tipo': 'acessorios'}
+    # {'idproduto': 2, 'valor': 'Shampoo', 'nome': Decimal('50.00'), 'tipo': 'higiene'}
+    # {'idproduto': 6, 'valor': 'condicionador', 'nome': Decimal('50.00'), 'tipo': 'higiene'}
+    # {'idproduto': 10, 'valor': 'Condicionador', 'nome': Decimal('50.00'), 'tipo': 'higiene'}
+
+#TESTE DE ATUALIZAÇÃO DE UM PRODUTO:
+
+    # produto.atualizar_produto('nome', 'Condicionador Plus', 6)
+
+    # for n in produto.ler_todos_produtos():
+    #     print(n)
+
+    # #RETORNO DA EXECUÇÃO:
+    # {'idproduto': 1, 'valor': 'Navalha', 'nome': Decimal('5.00'), 'tipo': 'acessorios'}
+    # {'idproduto': 2, 'valor': 'Shampoo', 'nome': Decimal('50.00'), 'tipo': 'higiene'}
+    # {'idproduto': 6, 'valor': 'Condicionador Plus', 'nome': Decimal('50.00'), 'tipo': 'higiene'}
+    # {'idproduto': 10, 'valor': 'Condicionador', 'nome': Decimal('50.00'), 'tipo': 'higiene'}
+
+#TESTE DE DELEÇÃO DE UM PRODUTO:
+
+    # produto.deletar_produto(10)
+    # for n in produto.ler_todos_produtos():
+    #     print(n)
+
+    # #RETORNO DA EXECUÇÃO:
+    # {'idproduto': 1, 'valor': 'Navalha', 'nome': Decimal('5.00'), 'tipo': 'acessorios'}
+    # {'idproduto': 2, 'valor': 'Shampoo', 'nome': Decimal('50.00'), 'tipo': 'higiene'}
+    # {'idproduto': 6, 'valor': 'Condicionador Plus', 'nome': Decimal('50.00'), 'tipo': 'higiene'}
+
+#TESTE DE PESQUISA PELO NOME DO PRODUTO:
+
+    # print(produto.pesquisar_nome_produto('Shampoo'))
+
+    # #RETORNO DA EXECUÇÃO:
+    # [(2, 'Shampoo', Decimal('50.00'), 'higiene')]
+
+#TESTE DE LEITURA DE UM PRODUTO PELO ID:
+    # print(produto.ler_um_produto(2))
+
+    # #RETORNO DA EXECUÇÃO:
+    # [(2, 'Shampoo', Decimal('50.00'), 'higiene')]
+
+#--------------------- TESTES COM ESTOQUE ---------------------
+
+#TESTE DE CADASTRO DE ESTOQUE:
+
+    # estoque.cadastro_estoque(6,200,0)
+
+    # for n in estoque.ler_todo_estoque():
+    #     print(n)
+
+    # #RETORNO DA EXECUÇÃO:
+    # {'id_estoque': 1, 'id_produto': 1, 'quantidade_atual': 90, 'quantidade_minima': 0, 'ultima_atualizacao': datetime.datetime(2025, 8, 28, 23, 3, 7, 146886)}
+    # {'id_estoque': 2, 'id_produto': 2, 'quantidade_atual': 49, 'quantidade_minima': 0, 'ultima_atualizacao': datetime.datetime(2025, 8, 28, 23, 3, 7, 162436)}
+    # {'id_estoque': 7, 'id_produto': 6, 'quantidade_atual': 200, 'quantidade_minima': 0, 'ultima_atualizacao': datetime.datetime(2025, 8, 29, 0, 45, 52, 783755)}
+
+#TESTE DE ATUALIZAÇÃO DE UM ESTOQUE:
+
+    # #estoque.atualizar_estoque('quantidade_atual', 180, 7)
+    # print(estoque.ler_um_estoque(7))
+
+    # # #RETORNO DA EXECUÇÃO:
+    # [(7, 6, 180, 0, datetime.datetime(2025, 8, 29, 0, 45, 52, 783755))]
+
+# TESTE DE DELEÇÃO DE UM ESTOQUE:
+
+    # estoque.deletar_estoque(7)
+    # print(estoque.ler_um_estoque(7))
+
+    # #RETORNO DA EXECUÇÃO:
+    # []
+

@@ -3,7 +3,7 @@ from crud import Crud
 class Estoque(Crud):
     
     tabela = 'estoque'
-    colunas_permitidas = ['id_produto', 'quantidade_atual', 'quantidade_minima']
+    colunas_permitidas = ['id_produto', 'quantidade_atual', 'quantidade_minima', 'ultima_atualizacao']
     coluna_id = 'id_estoque'
 
     def cadastro_estoque(self, id_produto, quantidade_atual, quantidade_minima):
@@ -14,7 +14,7 @@ class Estoque(Crud):
             quantidade_minima = quantidade_minima, 
         )
     
-    def ler_todos_estoque(self):
+    def ler_todo_estoque(self):
        return super().ler_todos()
     
     def pesquisar_nome_estoque(self, nome):
