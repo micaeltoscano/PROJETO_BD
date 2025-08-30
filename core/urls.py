@@ -17,5 +17,22 @@ urlpatterns = [
     path('funcionario/editar/', views.atualizar_funcionario, name='atualizar_funcionario'),
     path('funcionario/deletar/', views.deletar_funcionario, name='deletar_funcionario'),
 
+    
+    path('agenda/', views.agenda_list_view, name='lista_agenda'),
+    path('agenda/novo/', views.cadastrar_agenda, name='cadastrar_agenda'),
+    path('agenda/editar/', views.atualizar_agenda, name='atualizar_agenda'),
+    path('agenda/deletar/', views.deletar_agenda, name='deletar_agenda'),
+
+    path('servicos/', views.servico_list_view, name='lista_servico'),
+    path('servicos/novo/', views.cadastrar_servico, name='cadastrar_servico'),
+    path('servicos/editar/', views.atualizar_servico, name='atualizar_servico'),
+    path('servicos/deletar/', views.deletar_servico, name='deletar_servico'),
+
+    
+    path('estoque/', views.estoque_list_view, name='lista_estoque'),
+    path('estoque/novo/', views.cadastrar_estoque, name='cadastrar_estoque'),
+    path('estoque/editar/', views.atualizar_estoque, name='atualizar_estoque'),
+    path('estoque/deletar/', views.deletar_estoque, name='deletar_estoque'),
+
    
 ]
