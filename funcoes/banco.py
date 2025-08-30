@@ -27,7 +27,7 @@ class Banco:
             user=os.getenv("DB_USER"),
             password=os.getenv("DB_PASSWORD")
         )
-        return conn
+        return conn 
     
     def processar(self, query, parametros=None, fetch = False):
         conn = self.conectar() #AQUI ELE TENTA CONECTAR COM O SERVIDOR

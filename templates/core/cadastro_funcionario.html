@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastrar Funcionario - Barbearia{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-user-plus me-2"></i> Cadastrar Novo Funcionario</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{% url 'cadastrar_funcionario' %}">
+                    {% csrf_token %}
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="nome" class="form-label">Nome Completo <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="nome" name="nome" required 
+                                   placeholder="Digite o nome completo">
+                            <div class="form-text">Obrigatório</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">E-mail</label>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                   placeholder="exemplo@email.com">
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="cpf" class="form-label">CPF <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="cpf" name="cpf" required 
+                                   placeholder="000.000.000-00" oninput="formatarCPF(this)"
+                                   maxlength="14">
+                            <div class="form-text">Formato: 000.000.000-00</div>
+                        </div>
+
+                        <div class="mb-4">
+                        <label for="endereco" class="form-label">Endereço</label>
+                        <textarea class="form-control" id="endereco" name="endereco" rows="3" 
+                                  placeholder="Digite o endereço completo"></textarea>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="numero_celular" class="form-label">Celular <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="numero_celular" name="numero_celular" required 
+                                   placeholder="(11) 99999-9999" oninput="formatarTelefone(this)"
+                                   maxlength="15">
+                            <div class="form-text">Formato: (11) 99999-9999</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="salario" class="form-label">Salario <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="salario" name="salario">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="especialidade" class="form-label">especialidade <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="especialidade" name="especialidade">
+
+                    </div>
+                    
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{% url 'cliente_list' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Voltar para Lista
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save me-1"></i> Cadastrar Cliente
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card mt-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-info-circle me-2"></i>Informações</h5>
+                <p class="card-text">
+                    Campos marcados com <span class="text-danger">*</span> são obrigatórios.
+                    Após o cadastro, o cliente será redirecionado para a lista de clientes.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+
+<style>
+.card {
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.card-header {
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+}
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.btn {
+    border-radius: 0.375rem;
+    padding: 0.5rem 1.5rem;
+}
+
+.shadow {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+</style>
+{% endblock %}
