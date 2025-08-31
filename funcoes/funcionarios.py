@@ -16,6 +16,10 @@ class Funcionario(Crud):
             salario = salario,
             especialidade = especialidade,
         )
+
+        query = "SELECT IDFUNCIONARIO FROM FUNCIONARIO WHERE CPF = %s ORDER BY IDFUNCIONARIO DESC LIMIT 1"
+        result = self.processar(query, (cpf,))
+        return result
     
     def ler_todos_funcionarios(self):
         return super().ler_todos()

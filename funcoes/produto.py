@@ -3,14 +3,14 @@ from crud import Crud
 class Produto(Crud):
 
     tabela = 'produto'
-    colunas_permitidas = ['valor', 'nome', 'tipo']
+    colunas_permitidas = ['nome','valor' 'tipo']
     coluna_id = 'idproduto'
     
-    def cadastro_produto(self, valor, nome, tipo):
+    def cadastro_produto(self, nome, valor, tipo):
         
         super().cadastro(
-            valor = valor, 
             nome = nome, 
+            valor = valor, 
             tipo = tipo
                          )
     

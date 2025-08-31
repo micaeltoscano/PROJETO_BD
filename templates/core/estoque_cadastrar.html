@@ -13,25 +13,36 @@
                 <form method="POST" action="{% url 'cadastrar_estoque' %}">
                     {% csrf_token %}
                     
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="id_produto" class="form-label">ID do Produto <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" id="id_produto" name="id_produto" required 
-                                   placeholder="Ex: 1">
-                            <div class="form-text">ID do produto no sistema</div>
+                    <div class="mb-3">
+                        <label for="produto" class="form-label">Produto</label>
+                        <select class="form-select mb-2" id="produto" name="produto" required>
+                            <option value="" selected disabled>Selecione um produto</option>
+                            {% for produto in produtos %}
+                                <option value="{{ produto.nome}}">{{ produto.nome}}</option>
+                            {% endfor %}
+                        </select>
+                        
+                        <div class="d-flex gap-2 mt-2">
+                            <a href="{% url 'cadastrar_produto' %}" class="btn btn-outline-primary">
+                                <i class="fas fa-plus"></i> Novo Produto
+                            </a>
+                            <a href="{% url 'deletar_produto' %}" class="btn btn-outline-danger">
+                                <i class="fas fa-trash"></i> Deletar Produto
+                            </a>
                         </div>
+                    </div>
+
+                    <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="quantidade_atual" class="form-label">Quantidade Atual <span class="text-danger">*</span></label>
                             <input type="number" class="form-control" id="quantidade_atual" name="quantidade_atual" required 
                                    placeholder="Ex: 50" min="0">
                         </div>
-                    </div>
-                    
-                    <div class="row mb-3">
+                        
                         <div class="col-md-6">
                             <label for="quantidade_minima" class="form-label">Quantidade Mínima <span class="text-danger">*</span></label>
                             <input type="number" class="form-control" id="quantidade_minima" name="quantidade_minima" required 
-                                   placeholder="Ex: 10" min="0">
+                                placeholder="Ex: 10" min="0">
                             <div class="form-text">Alerta quando estoque chegar neste nível</div>
                         </div>
                     </div>

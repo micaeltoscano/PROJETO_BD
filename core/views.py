@@ -2,12 +2,17 @@ from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.shortcuts import render, redirect
-
+from funcoes.disponibilidade import Disponibilidade
 from funcoes.clientes import Clientes
 from funcoes.funcionarios import Funcionario
 from funcoes.servico import Servico
 from funcoes.agendas import Agenda
 from funcoes.estoque import Estoque
+from django.shortcuts import render, redirect
+from funcoes.categoria import Categoria
+from funcoes.produto import Produto
+from funcoes.utiliza import Utiliza
+
 
 def cliente_list_view(request):
     """View para template HTML que lista clientes do banco"""
@@ -37,7 +42,7 @@ def cadastrar_cliente(request):
         
         if not nome:
             messages.error(request, 'Nome é obrigatório')
-            return render(request, 'core/cadastrar_cliente.html')
+            return render(request, 'core/cadastro_cliente.html')
         
         try:
             c = Clientes()
@@ -86,8 +91,14 @@ def deletar_cliente(request):
     return render(request, 'core/deletar_cliente.html')
 
 def cadastrar_funcionario(request):
-    if request.method == 'POST':
 
+    horarios = []
+    for hora in range(8, 19):  
+        horarios.append(f"{hora:02d}:00")
+        horarios.append(f"{hora:02d}:30")
+
+    if request.method == 'POST':
+       
         nome = request.POST.get('nome')
         email = request.POST.get('email')
         cpf = request.POST.get('cpf')
@@ -96,20 +107,35 @@ def cadastrar_funcionario(request):
         salario = request.POST.get('salario')
         especialidade = request.POST.get('especialidade')
         
+        dias_semana = request.POST.getlist('dia_semana[]')
+        horas_inicio = request.POST.getlist('hora_inicio[]')
+        horas_fim = request.POST.getlist('hora_fim[]')
+        
         if not nome:
             messages.error(request, 'Nome é obrigatório')
             return render(request, 'core/cadastro_funcionario.html')
             
         try:
-            c = Funcionario()
-            c.cadastrar_funcionario(nome, email, cpf, endereco, numero_celular, salario, especialidade)
-            messages.success(request, 'Funcionario cadastrado com sucesso!')
-            return redirect('home')
+            f = Funcionario()
+            funcionario_id = f.cadastrar_funcionario(nome, email, cpf, endereco, numero_celular, salario, especialidade)
+            
+            d = Disponibilidade()
+            for i in range(len(dias_semana)):
+                if dias_semana[i] and horas_inicio[i] and horas_fim[i]:
+                    d.cadastro_disponibilidade(
+                        funcionario_id,  
+                        dias_semana[i],
+                        horas_inicio[i],
+                        horas_fim[i]
+                    )
+            
+            messages.success(request, 'Funcionário cadastrado com sucesso!')
+            return redirect('listar_funcionarios')
         
         except Exception as e:
             messages.error(request, f'Erro ao cadastrar: {str(e)}')
     
-    return render(request, 'core/cadastro_funcionario.html')
+    return render(request, 'core/cadastro_funcionario.html', {'horarios': horarios})
 
 def funcionario_list_view(request):
 
@@ -134,7 +160,7 @@ def atualizar_funcionario(request):
 
         coluna = request.POST.get('coluna')
         novo_valor = request.POST.get('novo_valor')
-        id = request.POST.get('id')
+        id = request.POST.get('idfuncionario')
         
         try:
             c = Funcionario()
@@ -164,7 +190,13 @@ def deletar_funcionario(request):
     return render(request, 'core/funcionario_deletar.html')
 
 def cadastrar_agenda(request):
+    horarios = []
+    for hora in range(8, 19):  
+        horarios.append(f"{hora:02d}:00")
+        horarios.append(f"{hora:02d}:30")
+
     if request.method == 'POST':
+        
         dia = request.POST.get('dia')
         horario = request.POST.get('horario')
         id_funcionario = request.POST.get('id_funcionario')
@@ -193,7 +225,7 @@ def cadastrar_agenda(request):
             messages.error(request, f'Erro ao agendar: {str(e)}')
             return render(request, 'core/agenda_cadastrar.html')
     
-    return render(request, 'core/agenda_cadastrar.html')
+    return render(request, 'core/agenda_cadastrar.html', {'horarios': horarios})
 
 def agenda_list_view(request):
     """View para template HTML que lista agendamentos do banco"""
@@ -257,26 +289,53 @@ def servico_list_view(request):
     return render(request, 'core/servico_list.html', context)
 
 def cadastrar_servico(request):
-    if request.method == 'POST':
-        nome_servico = request.POST.get('nome_servico')
-        valor = request.POST.get('valor')
-        id_categoria = request.POST.get('id_categoria')
-        duracao = request.POST.get('duracao')
-        
-        if not nome_servico or not valor or not id_categoria or not duracao:
-            messages.error(request, 'Todos os campos são obrigatórios!')
-            return render(request, 'core/servico_cadastrar.html')
-        
-        try:
-            s = Servico()
-            s.cadastro_servico(nome_servico, valor, id_categoria, duracao)
-            messages.success(request, 'Serviço cadastrado com sucesso!')
-            return redirect('lista_servico')
-            
-        except Exception as e:
-            messages.error(request, f'Erro ao cadastrar serviço: {str(e)}')
+    # Buscar categorias e produtos
+    c = Categoria()
+    categorias = c.ler_todas_categorias()
     
-    return render(request, 'core/servico_cadastrar.html')
+    p = Produto()
+    produtos = p.ler_todos_produtos()
+    
+    if request.method == 'POST':
+        nome = request.POST.get('nome')
+        valor = request.POST.get('valor')
+        duracao = request.POST.get('duracao')
+        categoria_id = request.POST.get('categoria')
+        
+        produto_ids = request.POST.getlist('produto_id[]')
+        produto_quantidades = request.POST.getlist('produto_quantidade[]')
+        
+        if nome and valor and duracao and categoria_id:
+            try:
+                s = Servico()
+                servico_id = s.cadastro_servico(
+                    nome_servico=nome,
+                    valor=valor,
+                    duracao=duracao,
+                    id_categoria=categoria_id
+                )
+                print(servico_id)
+                if servico_id and produto_ids and produto_ids[0]:  
+                    print("cheguei aqui!!!")
+                    u = Utiliza()
+                    for i in range(len(produto_ids)):
+                        if produto_ids[i] and produto_quantidades[i]:  
+                            u.cadastro_utiliza(
+                                id_servico=servico_id,
+                                id_produto=produto_ids[i],
+                                quantidade=produto_quantidades[i]
+                            )
+                
+                messages.success(request, 'Serviço cadastrado com sucesso!')
+                return redirect('lista_servico')
+                
+            except Exception as e:
+                messages.error(request, f'Erro ao cadastrar serviço: {str(e)}')
+    
+    return render(request, 'core/servico_cadastrar.html', {
+        'categorias': categorias,
+        'produtos': produtos
+    })
 
 def atualizar_servico(request):
     if request.method == 'POST':
@@ -329,25 +388,44 @@ def estoque_list_view(request):
     return render(request, 'core/estoque_list.html', context)
 
 def cadastrar_estoque(request):
+    try:
+        p = Produto()
+        produtos = p.ler_todos_produtos()
+    except Exception as e:
+        print(f"Erro ao buscar produtos: {e}")
+        produtos = []
+        messages.error(request, 'Erro ao carregar lista de produtos')
+
     if request.method == 'POST':
-        id_produto = request.POST.get('id_produto')
+        nome_produto = request.POST.get('produto')  
         quantidade_atual = request.POST.get('quantidade_atual')
         quantidade_minima = request.POST.get('quantidade_minima')
         
-        if not id_produto or not quantidade_atual or not quantidade_minima:
+        # DEBUG: Verifique o que está chegando
+        print(f"Nome produto: '{nome_produto}'")
+        print(f"Quantidade: {quantidade_atual}")
+        print(f"Mínima: {quantidade_minima}")
+        
+        if not nome_produto or not quantidade_atual or not quantidade_minima:
             messages.error(request, 'Todos os campos são obrigatórios!')
-            return render(request, 'core/estoque_cadastrar.html')
+            return render(request, 'core/estoque_cadastrar.html', {'produtos': produtos})
         
         try:
+            # ↓↓↓ MOVER a inicialização para DENTRO do bloco POST ↓↓↓
             e = Estoque()
-            e.cadastro_estoque(id_produto, quantidade_atual, quantidade_minima)
-            messages.success(request, 'Item adicionado ao estoque com sucesso!')
-            return redirect('lista_estoque')
+            sucesso = e.cadastro_estoque(nome_produto, quantidade_atual, quantidade_minima)
             
+            if sucesso:
+                messages.success(request, 'Item adicionado ao estoque com sucesso!')
+                return redirect('lista_estoque')
+            else:
+                messages.error(request, 'Erro ao adicionar item ao estoque!')
+                
         except Exception as e:
+            print(f"Erro completo no cadastro: {e}")  # ← Debug detalhado
             messages.error(request, f'Erro ao adicionar item: {str(e)}')
     
-    return render(request, 'core/estoque_cadastrar.html')
+    return render(request, 'core/estoque_cadastrar.html', {'produtos': produtos})
 
 def atualizar_estoque(request):
     if request.method == 'POST':
@@ -389,6 +467,59 @@ def deletar_estoque(request):
     
     return render(request, 'core/estoque_deletar.html')
 
+def cadastrar_categoria(request):
+    if request.method == 'POST':
+        nome_categoria = request.POST.get('nome_categoria')
+        
+        if nome_categoria:
+            try:
+                c = Categoria()
+                c.cadastro_categoria(nome_categoria)
+                messages.success(request, f'Categoria "{nome_categoria}" cadastrada com sucesso!')
+                return redirect('cadastrar_servico')  # Ou redirecione para onde preferir
+            except Exception as e:
+                messages.error(request, f'Erro ao cadastrar categoria: {str(e)}')
+    
+    return render(request, 'core/categoria_cadastrar.html')
+
+def cadastrar_produto(request):
+    if request.method == 'POST':
+
+        valor = request.POST.get('valor')
+        nome = request.POST.get('nome')
+        tipo = request.POST.get('tipo')
+        
+        if nome:
+            try:
+                p = Produto()
+                p.cadastro_produto(nome, valor, tipo)
+
+                messages.success(request, f'Produto "{nome}" cadastrado com sucesso!')
+                return redirect('cadastrar_produto')  
+            
+            except Exception as e:
+                messages.error(request, f'Erro ao cadastrar produto: {str(e)}')
+    
+    return render(request, 'core/produto_cadastrar.html')
+
+def deletar_produto(request):
+    if request.method == 'POST':
+        idproduto = request.POST.get('idproduto')
+        
+        if not idproduto:
+            messages.error(request, 'ID do produto é obrigatório!')
+            return render(request, 'core/produto_deletar.html')
+        
+        try:
+            p = Produto()
+            p.deletar_produto(idproduto)
+            messages.success(request, f'produto {idproduto} deletado com sucesso!')
+            return redirect('lista_estoque')
+            
+        except Exception as e:
+            messages.error(request, f'Erro ao deletar produto: {str(e)}')
+    
+    return render(request, 'core/produto_deletar.html')
 def home(request):
     return render(request, 'core/home.html')
 

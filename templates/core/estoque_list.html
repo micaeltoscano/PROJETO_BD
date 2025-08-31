@@ -24,6 +24,7 @@
                         <tr>
                             <th>ID</th>
                             <th>ID Produto</th>
+                            <th>Nome Produto</th>
                             <th>Quantidade Atual</th>
                             <th>Quantidade Mínima</th>
                             <th>Última Atualização</th>
@@ -36,6 +37,13 @@
                         <tr>
                             <td>{{ estoque.idestoque }}</td>
                             <td>{{ estoque.id_produto }}</td>
+                            <td>
+                                {% if estoque.nome %}
+                                    {{ estoque.nome }}
+                                {% else %}
+                                    Produto não encontrado
+                                {% endif %}
+                            </td>
                             <td>
                                 <span class="{% if estoque.quantidade_atual <= estoque.quantidade_minima %}text-danger fw-bold{% endif %}">
                                     {{ estoque.quantidade_atual }}

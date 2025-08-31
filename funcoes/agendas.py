@@ -44,7 +44,7 @@ class Agenda(Crud):
         if not resultado:
             raise ValueError(f"Serviço de ID {id_servico} não encontrado.")
 
-        duracao_servico = resultado[0][0]
+        duracao_servico = resultado[0]['duracao']
 
         #CONSULTA PARA VERIFICAR SE A DURACAO DO SERVICO INTERFERE NA DURAÇÃO DE OUTROS SERVICOS
         indisponibilidade_horario = self.processar(
@@ -89,7 +89,7 @@ class Agenda(Crud):
         return super().atualizar(coluna, novo_valor, id)
 
     #FUNCAO DE DELEÇÃO
-    def deletar(self, id):
+    def deletar_agenda(self, id):
         return super().deletar(id)
 
     #FUNCAO PARA CONFIRMAR O ENCERRAMENTO DO SERVICO

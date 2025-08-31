@@ -3,19 +3,41 @@ from crud import Crud
 class Estoque(Crud):
     
     tabela = 'estoque'
-    colunas_permitidas = ['id_produto', 'quantidade_atual', 'quantidade_minima', 'ultima_atualizacao']
+    colunas_permitidas = ['id_produto','quantidade_atual', 'quantidade_minima', 'ultima_atualizacao']
     coluna_id = 'idestoque'
 
-    def cadastro_estoque(self, id_produto, quantidade_atual, quantidade_minima):
-        
-        super().cadastro(
-            id_produto = id_produto, 
-            quantidade_atual = quantidade_atual, 
-            quantidade_minima = quantidade_minima, 
-        )
+    def cadastro_estoque(self, nome_produto, quantidade_atual, quantidade_minima):
+        try:
+
+            consulta = self.processar("""SELECT idproduto FROM produto WHERE nome = %s""", (nome_produto,), fetch=True)
+            
+            print(f"{consulta}: id do produto")
+            if not consulta:
+                raise ValueError(f"Produto '{nome_produto}' não encontrado")
+            
+            id_produto = consulta[0]['idproduto']
+            
+            super().cadastro(
+                id_produto=id_produto, 
+                quantidade_atual=quantidade_atual, 
+                quantidade_minima=quantidade_minima,
+                )
+            
+            print("chegou aqui!")
+            return True
+            
+        except Exception as e:
+            print(f"Erro ao cadastrar estoque: {e}")
+            return False
     
     def ler_todo_estoque(self):
-       return super().ler_todos()
+       
+        return self.processar("""
+                                SELECT e.*, p.nome 
+                                FROM estoque e 
+                                LEFT JOIN produto p ON e.id_produto = p.idproduto
+                                ORDER BY p.nome
+                                """, fetch=True)
     
     def pesquisar_nome_estoque(self, nome):
         return super().pesquisar_nome(nome)

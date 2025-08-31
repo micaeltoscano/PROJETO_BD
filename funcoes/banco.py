@@ -36,10 +36,17 @@ class Banco:
         try:
             with conn.cursor() as cur: #ESSE CURSOR É O QUE PERMITE USAR COMANDOS SQL NO PYTHON, USEI O WITH PQ PRECISA FECHAR ESSE CURSOR DEPOIS, DAI O WITH JÁ FECHA AUTOMATICO
                 cur.execute(query, parametros) #ELE EXECUTA A QUERY (CONSULTA DO BD)
-                if fetch:
-                    return cur.fetchall() #SE COLOCAR FETCH=TRUE ELE DEVOLVE O RESULTADO DE UMA CONSULTA SQL 
-                conn.commit() #CONFIRMA AS ALTERAÇÕES FEITAS 
-                return cur.rowcount #UM CONTADOR PARA SABER QUANTAS LINHAS FORAM RETORNADAS (USA NAS CONSULTAS PARA SABER SE JÁ ESTA CADASTRADO, AGENDADO, ETC)
+                if fetch: #SE COLOCAR FETCH=TRUE ELE DEVOLVE O RESULTADO DE UMA CONSULTA SQL 
+                    # Pega os nomes das colunas
+                    colunas = [desc[0] for desc in cur.description]
+                    # Converte para lista de dicionários
+                    resultados = []
+                    for linha in cur.fetchall():
+                        resultados.append(dict(zip(colunas, linha)))
+                    return resultados 
+                else:
+                    conn.commit() #CONFIRMA AS ALTERAÇÕES FEITAS 
+                    return cur.rowcount #UM CONTADOR PARA SABER QUANTAS LINHAS FORAM RETORNADAS (USA NAS CONSULTAS PARA SABER SE JÁ ESTA CADASTRADO, AGENDADO, ETC)
             
         except Exception as e:
             print("Erro ao executar query:", e)

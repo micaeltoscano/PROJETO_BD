@@ -34,5 +34,10 @@ urlpatterns = [
     path('estoque/editar/', views.atualizar_estoque, name='atualizar_estoque'),
     path('estoque/deletar/', views.deletar_estoque, name='deletar_estoque'),
 
+    path('categorias/novo/', views.cadastrar_categoria, name='cadastrar_categoria'),
+
+     path('produto/novo/', views.cadastrar_produto, name='cadastrar_produto'),
+     path('produto/deletar/', views.deletar_produto, name='deletar_produto'),
+
    
 ]

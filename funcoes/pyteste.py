@@ -26,3 +26,4 @@ pagamento = Pagamento()
 compra = Compra()
 itenscompra = Itens_compra()
 
+agenda.cadastrar_agenda('2024/12/05', '10:00', 1,3,1)

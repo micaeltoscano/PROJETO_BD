@@ -19,14 +19,18 @@
                             <input type="date" class="form-control" id="dia" name="dia" required>
                             <div class="form-text">Data do agendamento</div>
                         </div>
-
                         <div class="col-md-6">
                             <label for="horario" class="form-label">Horário <span class="text-danger">*</span></label>
-                            <input type="time" class="form-control" id="horario" name="horario" required>
+                            <select class="form-select" id="horario" name="horario" required>
+                                <option value="">Selecione...</option>
+                                {% for hora in horarios %}
+                                <option value="{{ hora }}">{{ hora }}</option>
+                                {% endfor %}
+                            </select>
                             <div class="form-text">Horário do agendamento</div>
                         </div>
                     </div>
-                    
+
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="id_funcionario" class="form-label">ID do Funcionário <span class="text-danger">*</span></label>
@@ -51,7 +55,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="status" class="form-label">Status</label>
-                            <select class="form-control" id="status" name="status">
+                            <select class="form-select" id="status" name="status">
                                 <option value="agendado" selected>Agendado</option>
                                 <option value="confirmado">Confirmado</option>
                                 <option value="realizado">Realizado</option>
