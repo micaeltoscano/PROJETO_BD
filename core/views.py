@@ -12,6 +12,7 @@ from django.shortcuts import render, redirect
 from funcoes.categoria import Categoria
 from funcoes.produto import Produto
 from funcoes.utiliza import Utiliza
+from funcoes.pagamentos import Pagamento
 
 
 def cliente_list_view(request):
@@ -196,7 +197,7 @@ def cadastrar_agenda(request):
         horarios.append(f"{hora:02d}:30")
 
     if request.method == 'POST':
-        
+
         dia = request.POST.get('dia')
         horario = request.POST.get('horario')
         id_funcionario = request.POST.get('id_funcionario')
@@ -501,8 +502,9 @@ def cadastrar_produto(request):
                 messages.error(request, f'Erro ao cadastrar produto: {str(e)}')
     
     return render(request, 'core/produto_cadastrar.html')
-
+    
 def deletar_produto(request):
+
     if request.method == 'POST':
         idproduto = request.POST.get('idproduto')
         
@@ -520,6 +522,49 @@ def deletar_produto(request):
             messages.error(request, f'Erro ao deletar produto: {str(e)}')
     
     return render(request, 'core/produto_deletar.html')
+
+def registrar_pagamento_servico(request):
+    a = Agenda()
+
+    if request.method == 'POST':
+        id_agenda = request.POST.get('id_agenda')  
+        metodo_pagamento = request.POST.get('metodo_pagamento')
+    
+        if id_agenda and metodo_pagamento:  
+            try:
+                a.confirmar_servico(id_agenda, metodo_pagamento)  
+                messages.success(request, 'Pagamento registrado com sucesso!')
+            except Exception as e:
+                messages.error(request, f'Erro ao registrar confirmação do serviço: {str(e)}')
+        else:
+            messages.error(request, 'Por favor, preencha todos os campos obrigatórios.')
+    
+    return render(request, 'core/pagamento_registrar.html')
+
+def pagamento_list_view(request):
+    p = Pagamento()
+    pagamento = p.ler_todos_pagamentos()
+    
+    context = {
+        'pagamentos': pagamento
+    }
+    return render(request, 'core/pagamento_list.html', context)
+
+# def registrar_pagamento_produto(request):
+#     c = Compra()
+
+#     if request.method == 'POST':
+#         metodo_pagamento = request.POST.get('metodo_pagamento')
+    
+#     if metodo_pagamento:
+#         try:
+#             c.registrar_compra(metodo_pagamento)
+
+#         except Exception as e:
+#                 messages.error(request, f'Erro ao registrar compra: {str(e)}')
+    
+#     return render(request, 'core/pagamento_registrar.html')
+
 def home(request):
     return render(request, 'core/home.html')
 

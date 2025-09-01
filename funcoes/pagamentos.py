@@ -34,7 +34,7 @@ class Pagamento(Crud):
         super().cadastro(
             id_agenda=idagenda,
             id_compra = None,
-            valor=buscar_valor[0][0],
+            valor=buscar_valor[0]['valor'],
             forma_pagamento=metodo_pagamento,
             status='APROVADO',
         )

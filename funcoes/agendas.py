@@ -97,7 +97,7 @@ class Agenda(Crud):
         try:     
             #ATUALIZA O STATUS DA AGENDA PARA CONCLUIDO
             self.atualizar_agenda("status", "concluido", id_agenda)
-
+            print("to aqui")
             #REGISTRA UM PAGAMENTO NA TABELA DE PAGAMENTOS
             pagamento = Pagamento()
             pagamento.registrar_pagamento_servico(id_agenda, metodo_pagamento)
@@ -111,8 +111,9 @@ class Agenda(Crud):
             if not consulta:
                 raise ValueError(f"Serviço não encontrado para o agendamento ID {id_agenda}.")
             
+           
             #COM O ID, ATUALIZA O ESTOQUE COM A QUANTIDADE DE PRODUTOS QUE FORAM USADOS DURANTE O SERVICO
-            id_servico = consulta[0][0]
+            id_servico = consulta[0]['id_servico']
             estoque = Estoque()
             estoque.atualizar_quantidade(origem='servico', id_origem=id_servico) 
             

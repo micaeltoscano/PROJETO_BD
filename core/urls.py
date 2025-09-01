@@ -36,8 +36,12 @@ urlpatterns = [
 
     path('categorias/novo/', views.cadastrar_categoria, name='cadastrar_categoria'),
 
-     path('produto/novo/', views.cadastrar_produto, name='cadastrar_produto'),
-     path('produto/deletar/', views.deletar_produto, name='deletar_produto'),
+    path('produto/novo/', views.cadastrar_produto, name='cadastrar_produto'),
+    path('produto/deletar/', views.deletar_produto, name='deletar_produto'),
+
+    path('pagamentos/', views.pagamento_list_view, name='lista_pagamento'),
+    path('pagamentos/servico/', views.registrar_pagamento_servico, name='registrar_pagamento_servico'),
+    #path('pagamentos/produto/', views.registrar_pagamento_produto, name='registrar_pagamento_produto'),
 
    
 ]
