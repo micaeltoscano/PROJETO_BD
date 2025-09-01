@@ -62,7 +62,7 @@ def atualizar_cliente(request):
 
         coluna = request.POST.get('coluna')
         novo_valor = request.POST.get('novo_valor')
-        id = request.POST.get('id')
+        id = request.POST.get('idcliente')
         
         try:
             c = Clientes()

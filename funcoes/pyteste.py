@@ -28,4 +28,5 @@ itenscompra = Itens_compra()
 
 #agenda.confirmar_servico(4, 'DINHEIRO')
 #print(utiliza.ler_todos_utiliza())
-print(pagamento.ler_todos_pagamentos())
+cliente.atualizar('nome', 'micael', 1)
+print(cliente.ler_todos_clientes())
