@@ -44,7 +44,7 @@ class Banco:
         except Exception as e:
             print("Erro ao executar query:", e)
             conn.rollback() #EVITA QUE ALTERAÇÕES SEJAM FEITAS EM CASO DE ERRO
-            return None
+            raise e
         
         finally:
             conn.close()

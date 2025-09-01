@@ -4,8 +4,6 @@ import funcionarios
 
 
 #agenda = Agenda()
-#funcionario = Funcionario()
-cliente = clientes.Clientes()
 #disponibilidade = Disponibilidade()
 #categoria = Categoria()
 #servico = Servico()
@@ -20,7 +18,7 @@ class Interface:
 
         while input_opcao != 5:
             print("==============================")
-            print("   Bem-vindo ao sistema!")
+            print("   Bem-vindo ao sistema!  ")
             print("==============================")
             print("1 - Clientes")
             print("2 - Funcionários")
@@ -50,23 +48,9 @@ class Interface:
                 case _:
                     print("Opção inválida. Tente novamente.")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     def display_opcao_clientes(self):
         input_opcao = 0
+        cliente = clientes.Clientes()
 
         while input_opcao != 7:
             print("==============================")
@@ -97,15 +81,14 @@ class Interface:
                     #Caso o usuário deseje adicionar um novo cliente, pra previnir as entradas inválidas
                     try:
                         nome = input("Nome: ")
-                        idade = input("Idade: ")
                         email = input("Email: ")
                         cpf = input("CPF: ")
                         endereco = input("Endereço: ")
                         numero_celular = input("Número de celular: ")
-                        clientes.Clientes().cadastrar_cliente(nome, idade, email, cpf, endereco, numero_celular)
+                        clientes.Clientes().cadastrar_cliente(nome, email, cpf, endereco, numero_celular)
 
                     except Exception as e:
-                        print(f"Erro ao adicionar cliente: {e}")
+                        print(f"Erro ao adicionar cliente: \n{e}")
                     
                 case 3:
                     nome = input("Nome para pesquisa: ")
@@ -142,10 +125,83 @@ class Interface:
                     print("Opção inválida. Tente novamente.")
 
     def display_opcao_funcionarios(self):
-        print("--- Menu Funcionários ---")
-        print("1 - Listar funcionários")
-        print("2 - Adicionar funcionário")
-        print("3 - Voltar")
+        input_opcao = 0
+        funcionario = funcionarios.Funcionario()
+
+        while input_opcao != 7:
+            print("==============================")
+            print("--- Menu Funcionários ---")
+            print("1 - Listar Funcionários")
+            print("2 - Adicionar Funcionário")
+            print("3 - Pesquisar_nome")
+            print("4 - Ver um Funcionário (id)")
+            print("5 - Atualizar Funcionário")
+            print("6 - Deletar Funcionário")
+            print("7 - Voltar")
+            print("==============================")
+
+            try:
+                input_opcao = int(input("Escolha uma opção (1-7): "))
+            except ValueError:
+                print("Entrada inválida. Por favor, insira um número entre 1 e 7.")
+                continue
+            
+            match input_opcao:
+                case 1:
+                    print("Listando Funcionários...")
+                    print(funcionario.ler_todos_funcionarios())
+
+                case 2:
+                    print("Adicionando Funcionário...")
+
+                    # Caso o usuário deseje adicionar um novo funcionário, pra previnir as entradas inválidas
+                    try:
+                        nome = input("Nome: ")
+                        email = input("Email: ")
+                        cpf = input("CPF: ")
+                        endereco = input("Endereço: ")
+                        numero_celular = input("Número de celular: ")
+                        salario = input("Salário: ")
+                        especialidade = input("Especialidade: ")
+                        funcionario.cadastrar_funcionario(nome, email, cpf, endereco, numero_celular, salario, especialidade)
+
+                    except Exception as e:
+                        print(f"Erro ao adicionar funcionário: {e}")
+
+                case 3:
+                    nome = input("Nome para pesquisa: ")
+                    resultados = funcionario.pesquisar_nome(nome)
+                    print(resultados)
+
+                case 4:
+                    id_funcionario = input("ID do funcionário: ")
+                    resultado = funcionario.ler_um_funcionario(id_funcionario)
+                    if len(resultado) == 0:
+                        print("Funcionário não encontrado.")
+                    else:
+                        print(resultado)
+
+                case 5:
+                    try:
+                        coluna = input("Coluna a ser atualizada (nome, email, cpf, endereco, numero_celular, salario, especialidade): ")
+                        novo_valor = input("Novo valor: ")
+                        id_funcionario = input("ID do funcionário a ser atualizado: ")
+                        funcionario.atualizar_funcionario(coluna, novo_valor, id_funcionario)
+
+                    except Exception as e:
+                        print(f"Erro ao atualizar funcionário: {e}")
+
+                case 6:
+                    id_funcionario = input("ID do funcionário a ser deletado: ")
+                    funcionario.deletar_funcionario(id_funcionario)
+
+                case 7:
+                    input("Pressione Enter para voltar ao menu principal...")
+                    continue
+
+                case _:
+                    print("Opção inválida. Tente novamente.")
+
 
     def display_opcao_servicos(self):
         print("--- Menu Serviços ---")
