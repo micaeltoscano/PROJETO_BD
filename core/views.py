@@ -16,14 +16,41 @@ from funcoes.pagamentos import Pagamento
 from datetime import datetime
 
 
+def list_view(request, classe, path):
+    
+    id_busca = request.GET.get('id_busca')
+    nome_busca = request.GET.get('nome_busca')
+
+    obj = classe() 
+
+    registros = obj.ler_todos()
+
+    if id_busca:
+        registros = obj.listar_um(id_busca)
+
+    if nome_busca:
+        registros = obj.pesquisar_nome(nome_busca)
+
+    context = {
+        'tabela': registros
+    }
+    return render(request, path , context)
+    
 #-----------------------CLIENTES-----------------------------------
 def cliente_list_view(request):
-    """View para template HTML que lista clientes do banco"""
-    # Busca os clientes usando sua classe Clientes
+
+    id_busca = request.GET.get('id_busca')
+    nome_busca = request.GET.get('nome_busca')
+
     c = Clientes()
     clientes = c.ler_todos_clientes()
+
+    if id_busca:
+        clientes = c.listar_um(id_busca)
+
+    if nome_busca:
+        clientes = c.pesquisar_nome(nome_busca)
     
-    # Passa os clientes para o template
     context = {
         'clientes': clientes
     }
@@ -144,12 +171,18 @@ def cadastrar_funcionario(request):
 
 def funcionario_list_view(request):
 
-    """View para template HTML que lista clientes do banco"""
-    # Busca os clientes usando sua classe Clientes
+    id_busca = request.GET.get('id_busca')
+    nome_busca = request.GET.get('nome_busca')
+
     f = Funcionario()
     funcionarios = f.ler_todos_funcionarios()
     
-    # Passa os clientes para o template
+    if id_busca:
+        funcionarios = f.listar_um(id_busca)
+
+    if nome_busca:
+        funcionarios = f.pesquisar_nome(nome_busca)
+   
     context = {
         'funcionarios': funcionarios
     }
@@ -235,11 +268,16 @@ def cadastrar_agenda(request):
     return render(request, 'core/agenda_cadastrar.html', {'horarios': horarios})
 
 def agenda_list_view(request):
-    """View para template HTML que lista agendamentos do banco"""
+
+    id_busca = request.GET.get('id_busca')
+    nome_busca = request.GET.get('nome_busca')
+
     a = Agenda()
     agendas = a.ler_toda_agenda()
     
-    # Passa os agendamentos para o template
+    if id_busca:
+        agendas = a.listar_um(id_busca)
+   
     context = {
         'agendas': agendas
     }
@@ -288,9 +326,18 @@ def deletar_agenda(request):
 #-----------------------SERVICO-----------------------------------
 
 def servico_list_view(request):
-    """View para listar serviços"""
+
+    id_busca = request.GET.get('id_busca')
+    nome_busca = request.GET.get('nome_busca')
+
     s = Servico()
     servicos = s.ler_todos_servicos()
+
+    if id_busca:
+        servicos = s.listar_um(id_busca)
+
+    if nome_busca:
+        servicos = s.pesquisar_nome(nome_busca)
     
     context = {
         'servicos': servicos
@@ -388,10 +435,24 @@ def deletar_servico(request):
 
 #-----------------------ESTOQUE-----------------------------------
 def estoque_list_view(request):
-    """View para listar estoque"""
+
+    id_estoque_busca = request.GET.get('id_estoque_busca')
+    id_produto_busca = request.GET.get('id_produto_busca')
+    nome_produto_busca = request.GET.get('nome_produto_busca')
+
     e = Estoque()
+    p = Produto()
     estoques = e.ler_todo_estoque()
     
+    if id_estoque_busca:
+        estoques = e.listar_um(id_estoque_busca)
+
+    if id_produto_busca:
+        estoques = p.listar_um(id_produto_busca)
+
+    if nome_produto_busca:
+        estoques = p.pesquisar_nome(nome_produto_busca)
+
     context = {
         'estoques': estoques
     }
@@ -573,9 +634,19 @@ def registrar_pagamento_servico(request):
     return render(request, 'core/pagamento_registrar.html')
 
 def pagamento_list_view(request):
+
+    id_busca = request.GET.get('id_busca')
+    nome_busca = request.GET.get('nome_busca')
+
     p = Pagamento()
     pagamento = p.ler_todos_pagamentos()
     
+    if id_busca:
+        pagamento = p.listar_um(id_busca)
+
+    if nome_busca:
+        pagamento = p.pesquisar_nome(nome_busca)
+
     context = {
         'pagamentos': pagamento
     }
@@ -596,7 +667,7 @@ def relatorios(request):
     ticket_medio = ((valor_total_vendas)/len(p))
     venda_mes = [sum(1 for p in p if p['data_pagamento'].month == mes_atual)]
     
-    
+
 
     context = {
         'total_vendas': len(p),
@@ -617,3 +688,6 @@ def relatorios(request):
     }
     
     return render(request, 'core/relatorio.html', context)
+
+
+

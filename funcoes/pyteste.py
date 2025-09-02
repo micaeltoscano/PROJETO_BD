@@ -34,14 +34,16 @@ itenscompra = Itens_compra()
 
 # a = [(pagamento.ler_todos_pagamentos()[n]['valor']) for n in range(len(pagamento.ler_todos_pagamentos()))]
 
-pg = pagamento.ler_todos_pagamentos()
-# print(sum(p['valor'] for p in pg))
+# pg = pagamento.ler_todos_pagamentos()
+# # print(sum(p['valor'] for p in pg))
 
-#print(pg[0]['data_pagamento'].month)
+# #print(pg[0]['data_pagamento'].month)
 
-mes_atual = datetime.now().month
+# mes_atual = datetime.now().month
 
 
-quantidade = [sum(1 for p in pg if p['data_pagamento'].month == mes_atual)]
+# quantidade = [sum(1 for p in pg if p['data_pagamento'].month == mes_atual)]
 
-print(quantidade)
+# print(quantidade)
+
+print(servico.pesquisar_nome('raspagem de caneco'))
