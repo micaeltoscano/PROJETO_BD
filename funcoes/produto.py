@@ -3,7 +3,7 @@ from crud import Crud
 class Produto(Crud):
 
     tabela = 'produto'
-    colunas_permitidas = ['nome','valor' 'tipo']
+    colunas_permitidas = ['nome','valor', 'tipo', 'status']
     coluna_id = 'idproduto'
     
     def cadastro_produto(self, nome, valor, tipo):
@@ -19,6 +19,9 @@ class Produto(Crud):
     
     def pesquisar_nome_produto(self, nome):
         return super().pesquisar_nome(nome)
+    
+    def ler_todos_produtos_ativos(self):
+        return super().ler_todos_ativos()
     
     def ler_um_produto(self, id):
         return super().listar_um(id)

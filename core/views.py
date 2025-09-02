@@ -15,6 +15,7 @@ from funcoes.utiliza import Utiliza
 from funcoes.pagamentos import Pagamento
 
 
+#-----------------------CLIENTES-----------------------------------
 def cliente_list_view(request):
     """View para template HTML que lista clientes do banco"""
     # Busca os clientes usando sua classe Clientes
@@ -90,6 +91,8 @@ def deletar_cliente(request):
             messages.error(request, f'Erro ao deletar: {str(e)}')
     
     return render(request, 'core/deletar_cliente.html')
+
+#-----------------------FUNCIONARIOS-----------------------------------
 
 def cadastrar_funcionario(request):
 
@@ -190,6 +193,8 @@ def deletar_funcionario(request):
     
     return render(request, 'core/funcionario_deletar.html')
 
+#-----------------------AGENDA-----------------------------------
+
 def cadastrar_agenda(request):
     horarios = []
     for hora in range(8, 19):  
@@ -279,6 +284,8 @@ def deletar_agenda(request):
     
     return render(request, 'core/agenda_deletar.html')
 
+#-----------------------SERVICO-----------------------------------
+
 def servico_list_view(request):
     """View para listar serviços"""
     s = Servico()
@@ -295,7 +302,7 @@ def cadastrar_servico(request):
     categorias = c.ler_todas_categorias()
     
     p = Produto()
-    produtos = p.ler_todos_produtos()
+    produtos = p.ler_todos_produtos_ativos()
     
     if request.method == 'POST':
         nome = request.POST.get('nome')
@@ -378,6 +385,7 @@ def deletar_servico(request):
     
     return render(request, 'core/servico_deletar.html')
 
+#-----------------------ESTOQUE-----------------------------------
 def estoque_list_view(request):
     """View para listar estoque"""
     e = Estoque()
@@ -390,8 +398,10 @@ def estoque_list_view(request):
 
 def cadastrar_estoque(request):
     try:
+        #FAZ UMA CONSULTA PARA LER TODOS OS PRODUTOS CADASTRADOS NO SISTEMA QUE ESTÃO ATIVOS
         p = Produto()
-        produtos = p.ler_todos_produtos()
+        produtos = p.ler_todos_produtos_ativos()
+
     except Exception as e:
         print(f"Erro ao buscar produtos: {e}")
         produtos = []
@@ -423,7 +433,7 @@ def cadastrar_estoque(request):
                 messages.error(request, 'Erro ao adicionar item ao estoque!')
                 
         except Exception as e:
-            print(f"Erro completo no cadastro: {e}")  # ← Debug detalhado
+            print(f"Erro completo no cadastro: {e}")  
             messages.error(request, f'Erro ao adicionar item: {str(e)}')
     
     return render(request, 'core/estoque_cadastrar.html', {'produtos': produtos})
@@ -450,6 +460,7 @@ def atualizar_estoque(request):
     return render(request, 'core/estoque_atualizar.html')
 
 def deletar_estoque(request):
+    
     if request.method == 'POST':
         idestoque = request.POST.get('idestoque')
         
@@ -468,6 +479,8 @@ def deletar_estoque(request):
     
     return render(request, 'core/estoque_deletar.html')
 
+#-----------------------CATEGORIA-----------------------------------
+
 def cadastrar_categoria(request):
     if request.method == 'POST':
         nome_categoria = request.POST.get('nome_categoria')
@@ -483,7 +496,11 @@ def cadastrar_categoria(request):
     
     return render(request, 'core/categoria_cadastrar.html')
 
+#-----------------------PRODUTO-----------------------------------
+
 def cadastrar_produto(request):
+
+    #RECUPERA OS DADOS DE ENTRADA PARA O CADASTRO DO PRODUTO
     if request.method == 'POST':
 
         valor = request.POST.get('valor')
@@ -493,16 +510,27 @@ def cadastrar_produto(request):
         if nome:
             try:
                 p = Produto()
-                p.cadastro_produto(nome, valor, tipo)
+                #CASO O PRODUTO JÁ ESTEJA CADASTRADO NO BANCO, ELE VAI SER APENAS REATIVADO
+                if p.pesquisar_nome_produto(nome):
 
-                messages.success(request, f'Produto "{nome}" cadastrado com sucesso!')
-                return redirect('cadastrar_produto')  
+                    idproduto = p.pesquisar_nome_produto('navalha de caneco')[0]['idproduto'] #ATRAVES DA CONSULTA DE PESQUISAR POR NOME, PEGA O ID
+                    p.atualizar_produto('status', 'ATIVO', idproduto) #ATUALIZA O PRODUTO
+                    p.atualizar_produto('valor', valor , idproduto)
+                    p.atualizar_produto('tipo', tipo, idproduto)
+                    messages.success(request, f'Produto "{nome}" REATIVADO NO SISTEMA com sucesso!')
+                    return redirect('cadastrar_produto')  
+
+                else:    
+                    #CASO NÃO TENHA CADASTRO, ELE É CADASTRADO
+                    p.cadastro_produto(nome, valor, tipo)
+                    messages.success(request, f'Produto "{nome}" cadastrado com sucesso!')
+                    return redirect('cadastrar_produto')  
             
             except Exception as e:
                 messages.error(request, f'Erro ao cadastrar produto: {str(e)}')
     
     return render(request, 'core/produto_cadastrar.html')
-    
+  
 def deletar_produto(request):
 
     if request.method == 'POST':
@@ -514,7 +542,7 @@ def deletar_produto(request):
         
         try:
             p = Produto()
-            p.deletar_produto(idproduto)
+            p.atualizar_produto('status', 'INATIVO', idproduto)
             messages.success(request, f'produto {idproduto} deletado com sucesso!')
             return redirect('lista_estoque')
             
@@ -522,6 +550,8 @@ def deletar_produto(request):
             messages.error(request, f'Erro ao deletar produto: {str(e)}')
     
     return render(request, 'core/produto_deletar.html')
+
+#-----------------------PAGAMENTO-----------------------------------  
 
 def registrar_pagamento_servico(request):
     a = Agenda()
@@ -550,21 +580,7 @@ def pagamento_list_view(request):
     }
     return render(request, 'core/pagamento_list.html', context)
 
-# def registrar_pagamento_produto(request):
-#     c = Compra()
-
-#     if request.method == 'POST':
-#         metodo_pagamento = request.POST.get('metodo_pagamento')
-    
-#     if metodo_pagamento:
-#         try:
-#             c.registrar_compra(metodo_pagamento)
-
-#         except Exception as e:
-#                 messages.error(request, f'Erro ao registrar compra: {str(e)}')
-    
-#     return render(request, 'core/pagamento_registrar.html')
-
+#-----------------------HOME-----------------------------------
 def home(request):
     return render(request, 'core/home.html')
 
