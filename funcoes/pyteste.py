@@ -11,6 +11,7 @@ from estoque import Estoque
 from pagamentos import Pagamento
 from compra import Compra
 from itens_compra import Itens_compra
+from datetime import datetime
 
 agenda = Agenda()
 funcionario = Funcionario()
@@ -26,6 +27,21 @@ pagamento = Pagamento()
 compra = Compra()
 itenscompra = Itens_compra()
 
-print(produto.pesquisar_nome_produto('navalha de caneco'))
-#produto.atualizar_produto('status', 'INATIVO', 1)
-#print(produto.ler_todos_produtos())
+# print((pagamento.ler_todos_pagamentos()[0]['valor']))
+
+# for n in range(len(pagamento.ler_todos_pagamentos())):
+#      print(pagamento.ler_todos_pagamentos()[n]['valor'])
+
+# a = [(pagamento.ler_todos_pagamentos()[n]['valor']) for n in range(len(pagamento.ler_todos_pagamentos()))]
+
+pg = pagamento.ler_todos_pagamentos()
+# print(sum(p['valor'] for p in pg))
+
+#print(pg[0]['data_pagamento'].month)
+
+mes_atual = datetime.now().month
+
+
+quantidade = [sum(1 for p in pg if p['data_pagamento'].month == mes_atual)]
+
+print(quantidade)

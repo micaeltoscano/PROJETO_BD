@@ -43,5 +43,7 @@ urlpatterns = [
     path('pagamentos/servico/', views.registrar_pagamento_servico, name='registrar_pagamento_servico'),
     #path('pagamentos/produto/', views.registrar_pagamento_produto, name='registrar_pagamento_produto'),
 
+     path('relatorios/', views.relatorios, name='relatorios'),
+
    
 ]

@@ -13,6 +13,7 @@ from funcoes.categoria import Categoria
 from funcoes.produto import Produto
 from funcoes.utiliza import Utiliza
 from funcoes.pagamentos import Pagamento
+from datetime import datetime
 
 
 #-----------------------CLIENTES-----------------------------------
@@ -584,3 +585,35 @@ def pagamento_list_view(request):
 def home(request):
     return render(request, 'core/home.html')
 
+def relatorios(request):
+
+    pagamento = Pagamento()
+    mes_atual = datetime.now().month
+
+    p = pagamento.ler_todos_pagamentos()
+
+    valor_total_vendas = sum(n['valor'] for n in p)
+    ticket_medio = ((valor_total_vendas)/len(p))
+    venda_mes = [sum(1 for p in p if p['data_pagamento'].month == mes_atual)]
+    
+    
+
+    context = {
+        'total_vendas': len(p),
+        'valor_total_vendas': valor_total_vendas,
+        'ticket_medio': ticket_medio,
+        'vendas_mes': venda_mes[0],
+        # 'total_produtos': total_produtos,
+        # 'valor_total_estoque': valor_total_estoque,
+        # 'produtos_baixo_estoque': produtos_baixo_estoque,
+        # 'categorias_count': categorias_count,
+        # 'total_clientes': total_clientes,
+        # 'clientes_ativos': clientes_ativos,
+        # 'novos_clientes_mes': novos_clientes_mes,
+        # 'frequencia_media': 2.5, 
+        # 'ultimas_vendas': ultimas_vendas,
+        # 'produtos': produtos,
+        # 'clientes': clientes,
+    }
+    
+    return render(request, 'core/relatorio.html', context)

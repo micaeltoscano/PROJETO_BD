@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+
+{% block title %}Relatórios - Barbearia{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4"><i class="fas fa-chart-line"></i> Relatórios</h1>
+    
+    <!-- Relatório de Vendas -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-money-bill-wave"></i> Relatório de Vendas
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-3 text-center">
+                    <div class="stat-value">{{ total_vendas|default:"0" }}</div>
+                    <div class="stat-label">Total de Vendas</div>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="stat-value">R$ {{ valor_total_vendas|default:"0,00" }}</div>
+                    <div class="stat-label">Valor Total</div>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="stat-value">R$ {{ ticket_medio|default:"0,00" }}</div>
+                    <div class="stat-label">Ticket Médio</div>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="stat-value">{{ vendas_mes|default:"0" }}</div>
+                    <div class="stat-label">Vendas este Mês</div>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Serviço</th>
+                            <th>Cliente</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for venda in ultimas_vendas %}
+                        <tr>
+                            <td>{{ venda.data|date:"d/m/Y" }}</td>
+                            <td>{{ venda.servico.nome }}</td>
+                            <td>{{ venda.cliente.nome }}</td>
+                            <td>R$ {{ venda.valor }}</td>
+                            <td>
+                                <span class="badge bg-{% if venda.status == 'concluido' %}success{% else %}warning{% endif %}">
+                                    {{ venda.status }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">Nenhuma venda registrada</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Relatório de Estoque -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-boxes"></i> Relatório de Estoque
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-3 text-center">
+                    <div class="stat-value">{{ total_produtos|default:"0" }}</div>
+                    <div class="stat-label">Total de Produtos</div>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="stat-value">R$ {{ valor_total_estoque|default:"0,00" }}</div>
+                    <div class="stat-label">Valor em Estoque</div>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="stat-value">{{ produtos_baixo_estoque|default:"0" }}</div>
+                    <div class="stat-label">Produtos com Baixo Estoque</div>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="stat-value">{{ categorias_count|default:"0" }}</div>
+                    <div class="stat-label">Categorias</div>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Valor Unitário</th>
+                            <th>Valor Total</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for produto in produtos %}
+                        <tr>
+                            <td>{{ produto.nome }}</td>
+                            <td>
+                                <span class="{% if produto.quantidade < produto.estoque_minimo %}text-danger fw-bold{% endif %}">
+                                    {{ produto.quantidade }}
+                                </span>
+                            </td>
+                            <td>R$ {{ produto.valor_unitario }}</td>
+                            <td>R$ {{ produto.valor_total }}</td>
+                            <td>
+                                <span class="badge bg-{% if produto.status == 'ATIVO' %}success{% else %}secondary{% endif %}">
+                                    {{ produto.status }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">Nenhum produto em estoque</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Relatório de Clientes -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-users"></i> Relatório de Clientes
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-3 text-center">
+                    <div class="stat-value">{{ total_clientes|default:"0" }}</div>
+                    <div class="stat-label">Total de Clientes</div>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="stat-value">{{ clientes_ativos|default:"0" }}</div>
+                    <div class="stat-label">Clientes Ativos</div>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="stat-value">{{ novos_clientes_mes|default:"0" }}</div>
+                    <div class="stat-label">Novos Clientes (Mês)</div>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="stat-value">{{ frequencia_media|default:"0" }}</div>
+                    <div class="stat-label">Frequência Média (visitas/mês)</div>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Telefone</th>
+                            <th>Total de Visitas</th>
+                            <th>Última Visita</th>
+                            <th>Valor Gasto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cliente in clientes %}
+                        <tr>
+                            <td>{{ cliente.nome }}</td>
+                            <td>{{ cliente.telefone }}</td>
+                            <td>{{ cliente.total_visitas }}</td>
+                            <td>{{ cliente.ultima_visita|date:"d/m/Y" }}</td>
+                            <td>R$ {{ cliente.total_gasto }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">Nenhum cliente cadastrado</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+    .card-header {
+        background-color: #343a40;
+        color: white;
+        border-radius: 10px 10px 0 0 !important;
+        font-weight: 600;
+    }
+    .stat-value {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #343a40;
+    }
+    .stat-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    .table-responsive {
+        border-radius: 0 0 10px 10px;
+    }
+</style>
+{% endblock %}
