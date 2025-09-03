@@ -3,13 +3,13 @@ from crud import Crud
 class Servico(Crud):
 
     tabela = "servico"
-    colunas_permitidas = ['nome', 'valor', 'duracao']
+    colunas_permitidas = ['nome', 'valor','id_categoria', 'duracao']
     coluna_id = 'idservico'
 
-    def cadastro_servico(self, nome_servico, valor, id_categoria, duracao):
+    def cadastro_servico(self, nome, valor, id_categoria, duracao):
 
         super().cadastro(
-            nome_servico = nome_servico, 
+            nome = nome, 
             valor = valor, 
             id_categoria = id_categoria, 
             duracao = duracao

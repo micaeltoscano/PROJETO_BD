@@ -1,12 +1,11 @@
 import crud
 import clientes
 import funcionarios
-
+import servico
+import categoria
 
 #agenda = Agenda()
 #disponibilidade = Disponibilidade()
-#categoria = Categoria()
-#servico = Servico()
 #compra = Compra()
 
 class Interface:
@@ -204,10 +203,89 @@ class Interface:
 
 
     def display_opcao_servicos(self):
-        print("--- Menu Serviços ---")
-        print("1 - Listar serviços")
-        print("2 - Adicionar serviço")
-        print("3 - Voltar")
+        input_opcao = 0
+        servicos = servico.Servico()
+        categorias = categoria.Categoria()
+
+        while input_opcao != 7:
+            print("==============================")
+            print("1 - Listar serviços")
+            print("2 - Adicionar serviço")
+            print("3 - Pesquisar nome do serviço")
+            print("4 - Ver um serviço")
+            print("5 - Atualizar serviço")
+            print("6 - Deletar serviço")
+            print("7 - Voltar")
+            print("==============================")
+
+            try:
+                input_opcao = int(input("Escolha uma opção (1-7): "))
+            except ValueError:
+                print("Entrada inválida. Por favor, insira um número entre 1 e 7.")
+                continue
+
+            match input_opcao:
+                case 1:
+                    print("Listando Serviços...")
+                    servicos.ler_todos_servicos()
+
+                case 2:
+                    try:
+                        nome_servico  = input("Digite o nome do serviço:")
+                        valor = input("Digite o valor do serviço:")
+                        resposta = input("A categoria já foi cadastrada? (1 ou 0): ")
+
+                        #Verifica se a categoria já existe
+                        if resposta == 1 :
+                            categorias.ler_todas_categorias()
+                            id_categoria = input("Digite o id da categoria do serviço:")
+
+                        else:
+                            categoria_nome = input("Digite o nome da categoria:")
+                            categorias.cadastro_categoria(categoria_nome)
+                            categorias.ler_todas_categorias()
+                            id_categoria = input("Digite o id da categoria do serviço:")
+
+                        duracao = input("Digite a duração do serviço:")
+
+                        servicos.cadastro_servico(nome_servico, valor, id_categoria, duracao)
+                    
+                    except Exception as e:
+                        print(f"Erro ao adicionar serviço: {e}")
+
+                case 3:
+                    nome = input("Digite o nome do serviço: ")
+                    resultados = servicos.pesquisar_nome(nome)
+                    print(resultados)
+
+                case 4:
+                    id_servico = input("ID do serviço: ")
+                    resultado = servicos.ler_um_servico(id_servico)
+                    if len(resultado) == 0:
+                        print("Serviço não encontrado.")
+                    else:
+                        print(resultado)
+
+                case 5:
+                    try:
+                        coluna = input("Coluna a ser atualizada (nome, valor, id_categoria, duracao): ")
+                        novo_valor = input("Novo valor: ")
+                        id_servico = input("ID do serviço a ser atualizado: ")
+                        servicos.atualizar_servico(coluna, novo_valor, id_servico)
+
+                    except Exception as e:
+                        print(f"Erro ao atualizar serviço: {e}")
+
+                case 6:
+                    id_servico = input("ID do serviço a ser deletado: ")
+                    servicos.deletar_servico(id_servico)
+
+                case 7:
+                    input("Pressione Enter para voltar ao menu principal...")
+                    continue
+
+                case _:
+                    print("Opção inválida. Tente novamente.")
 
     def display_opcao_agendas(self):
         print("--- Menu Agendas ---")
