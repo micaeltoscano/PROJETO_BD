@@ -3,6 +3,7 @@ import clientes
 import funcionarios
 import servico
 import categoria
+import agendas
 
 #agenda = Agenda()
 #disponibilidade = Disponibilidade()
@@ -288,10 +289,74 @@ class Interface:
                     print("Opção inválida. Tente novamente.")
 
     def display_opcao_agendas(self):
-        print("--- Menu Agendas ---")
-        print("1 - Listar agendas")
-        print("2 - Adicionar agenda")
-        print("3 - Voltar")
+        input_opcao = 0
+        agenda = agendas.Agenda()
+        
+        while input_opcao != 7:
+            print("==============================" \
+                  "1 - Listar agendas" \
+                  "2 - Cadastrar agenda" \
+                  "3 - Pesquisar agenda" \
+                  "4 - Ver uma agenda" \
+                  "5 - Atualizar agenda" \
+                  "6 - Deletar agenda" \
+                  "7 - Voltar")
+
+            try:
+                input_opcao = int(input("Escolha uma opção (1-7): "))
+            except ValueError:
+                print("Entrada inválida. Por favor, insira um número entre 1 e 7.")
+                continue
+
+            match input_opcao:
+                case 1:
+                    print("Listando Agendas...")
+                    agenda.ler_toda_agenda()
+
+                case 2:
+                    try:
+                        dia = input("Digite o dia da agenda:")
+                        horario = input("Digite o horario da agenda:")
+                        id_funcionario = input("Digite o id do funcionário:")
+                        id_servico = input("Digite o id de servico")
+                        agenda.cadastro_agenda(dia, horario, id_funcionario, id_servico, id_cliente, status='agendado')
+
+                    except Exception as e:
+                        print(f"Erro ao adicionar agenda: {e}")
+
+                case 3:
+                    nome = input("Digite o nome da agenda: ")
+                    resultados = agenda.pesquisar_nome(nome)
+                    print(resultados)
+
+                case 4:
+                    id_agenda = input("ID da agenda: ")
+                    resultado = agenda.ler_uma_agenda(id_agenda)
+                    if len(resultado) == 0:
+                        print("Agenda não encontrada.")
+                    else:
+                        print(resultado)
+
+                case 5:
+                    try:
+                        coluna = input("Coluna a ser atualizada (nome, data, hora): ")
+                        novo_valor = input("Novo valor: ")
+                        id_agenda = input("ID da agenda a ser atualizada: ")
+                        agenda.atualizar_agenda(coluna, novo_valor, id_agenda)
+
+                    except Exception as e:
+                        print(f"Erro ao atualizar agenda: {e}")
+
+                case 6:
+                    id_agenda = input("ID da agenda a ser deletada: ")
+                    agenda.deletar_agenda(id_agenda)
+
+                case 7:
+                    input("Pressione Enter para voltar ao menu principal...")
+                    continue
+
+                case _:
+                    print("Opção inválida. Tente novamente.")
 
 interface = Interface()
 interface.display_menu()
