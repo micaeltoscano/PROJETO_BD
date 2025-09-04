@@ -3,19 +3,41 @@ from crud import Crud
 class Estoque(Crud):
     
     tabela = 'estoque'
-    colunas_permitidas = ['id_produto', 'quantidade_atual', 'quantidade_minima', 'ultima_atualizacao']
+    colunas_permitidas = ['id_produto','quantidade_atual', 'quantidade_minima', 'ultima_atualizacao']
     coluna_id = 'idestoque'
 
-    def cadastro_estoque(self, id_produto, quantidade_atual, quantidade_minima):
-        
-        super().cadastro(
-            id_produto = id_produto, 
-            quantidade_atual = quantidade_atual, 
-            quantidade_minima = quantidade_minima, 
-        )
+    def cadastro_estoque(self, nome_produto, quantidade_atual, quantidade_minima):
+        try:
+
+            consulta = self.processar("""SELECT idproduto FROM produto WHERE nome = %s""", (nome_produto,), fetch=True)
+            
+            print(f"{consulta}: id do produto")
+            if not consulta:
+                raise ValueError(f"Produto '{nome_produto}' não encontrado")
+            
+            id_produto = consulta[0]['idproduto']
+            
+            super().cadastro(
+                id_produto=id_produto, 
+                quantidade_atual=quantidade_atual, 
+                quantidade_minima=quantidade_minima,
+                )
+            
+            print("chegou aqui!")
+            return True
+            
+        except Exception as e:
+            print(f"Erro ao cadastrar estoque: {e}")
+            return False
     
     def ler_todo_estoque(self):
-       return super().ler_todos()
+       
+        return self.processar("""
+                                SELECT e.*, p.nome 
+                                FROM estoque e 
+                                LEFT JOIN produto p ON e.id_produto = p.idproduto
+                                ORDER BY p.nome
+                                """, fetch=True)
     
     def pesquisar_nome_estoque(self, nome):
         return super().pesquisar_nome(nome)
@@ -68,19 +90,18 @@ class Estoque(Crud):
             raise ValueError("Serviço não encontrado ou não utiliza produtos.")
 
         #ATUALIZA O ESTOQUE DE CADA PRODUTO UTILIZADO NO SERVIÇO
-        for quantidade, id_produto in pesquisa: #É NECESSÁRIO O FOR, POIS UMA OPERACAO PODE USAR MAIS DE UM PRODUTO
-            
-            #LOCALIZANDO O ID DO ESTOQUE PARA O PRODUTO
-            estoque_info = self.processar(f"""SELECT {self.coluna_id} FROM {self.tabela} 
-                                              WHERE id_produto = %s""", 
-                                             (id_produto,), fetch=True)
+        for item in pesquisa:
+            quantidade = item['quantidade']
+            id_produto = item['id_produto']
         
+            estoque_info = self.processar(f"""SELECT {self.coluna_id} FROM {self.tabela} 
+                                         WHERE id_produto = %s""", 
+                                     (id_produto,), fetch=True)
+            
             if not estoque_info:
                 raise ValueError(f"Produto ID {id_produto} não encontrado no estoque.")
-            
-            #LOCALIZANDO O ID DO ESTOQUE PARA O PRODUTO
-            id_estoque = estoque_info[0][0]  
-            
+            id_estoque = estoque_info[0][self.coluna_id]  
+        
             quantidade_atual_info = self.processar(f"""SELECT quantidade_atual FROM {self.tabela} 
                                                     WHERE {self.coluna_id} = %s""",
                                                 (id_estoque,), fetch=True)
@@ -88,6 +109,6 @@ class Estoque(Crud):
             if not quantidade_atual_info:
                 raise ValueError(f"Estoque ID {id_estoque} não encontrado.")
             
-            estoque_atual = quantidade_atual_info[0][0] + (quantidade * operacao)
+            estoque_atual = quantidade_atual_info[0]['quantidade_atual'] + (quantidade * operacao)
             
             self.atualizar_estoque('quantidade_atual', estoque_atual, id_estoque)

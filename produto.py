@@ -3,14 +3,14 @@ from crud import Crud
 class Produto(Crud):
 
     tabela = 'produto'
-    colunas_permitidas = ['valor', 'nome', 'tipo']
+    colunas_permitidas = ['nome','valor', 'tipo', 'status']
     coluna_id = 'idproduto'
     
-    def cadastro_produto(self, valor, nome, tipo):
+    def cadastro_produto(self, nome, valor, tipo):
         
         super().cadastro(
-            valor = valor, 
             nome = nome, 
+            valor = valor, 
             tipo = tipo
                          )
     
@@ -19,6 +19,9 @@ class Produto(Crud):
     
     def pesquisar_nome_produto(self, nome):
         return super().pesquisar_nome(nome)
+    
+    def ler_todos_produtos_ativos(self):
+        return super().ler_todos_ativos()
     
     def ler_um_produto(self, id):
         return super().listar_um(id)

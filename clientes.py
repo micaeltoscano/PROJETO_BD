@@ -30,3 +30,4 @@ class Clientes(Crud):
 
     def deletar_cliente(self, id):
         return super().deletar(id)
+        
