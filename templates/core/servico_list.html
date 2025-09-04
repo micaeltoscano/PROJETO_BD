@@ -60,7 +60,7 @@
                         {% for servico in servicos %}
                         <tr>
                             <td>{{ servico.idservico|default:"-" }}</td>
-                            <td>{{ servico.nome_servico|default:"Não informado" }}</td>
+                            <td>{{ servico.nome|default:"Não informado" }}</td>
                             <td>R$ {{ servico.valor|floatformat:2|default:"0,00" }}</td>
                             <td>{{ servico.duracao|default:"0" }} min</td>
                         </tr>

@@ -306,7 +306,7 @@ def atualizar_agenda(request):
 
 def deletar_agenda(request):
     if request.method == 'POST':
-        idagenda = request.POST.get('idagenda')
+        idagenda = int(request.POST.get('idagenda'))
         
         if not idagenda:
             messages.error(request, 'ID do agendamento é obrigatório!')
@@ -314,8 +314,8 @@ def deletar_agenda(request):
         
         try:
             a = Agenda()
-            a.deletar_agenda(idagenda)
-            messages.success(request, f'Agendamento {idagenda} deletado com sucesso!')
+            if a.deletar_agenda(idagenda):
+                messages.success(request, f'Agendamento {idagenda} deletado com sucesso!')
             return redirect('lista_agenda')
             
         except Exception as e:
@@ -365,7 +365,7 @@ def cadastrar_servico(request):
             try:
                 s = Servico()
                 servico_id = s.cadastro_servico(
-                    nome_servico=nome,
+                    nome=nome,
                     valor=valor,
                     duracao=duracao,
                     id_categoria=categoria_id

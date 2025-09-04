@@ -39,3 +39,24 @@ class Disponibilidade(Crud):
     def deletar_disponibilidade(self, id):
         return super().deletar(id)
     
+    def disponibilidade_funcionario(self, id_funcionario, horario, dia):
+
+        #VERIFICAR A DISPONIBILIDADE DO FUNCIONARIO NO DIA
+        try:
+            disponibilidade_dia = self.processar(
+                                                """ SELECT 1 
+                                                    FROM disponibilidade 
+                                                    WHERE id_funcionario = %s AND %s BETWEEN hora_inicio AND hora_fim""",
+                                                (id_funcionario, horario),
+                                                fetch=True
+                                            )
+            if disponibilidade_dia:
+                return True
+            
+            else:
+                raise ValueError(f"O funcionário de ID {id_funcionario} não está disponível no dia {dia} no horário {horario}")
+            
+        except Exception as e:
+            raise ValueError(f"Erro ao consultar a disponibilidade do funcionario: {e}")
+       
+    

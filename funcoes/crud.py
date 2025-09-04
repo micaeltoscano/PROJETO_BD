@@ -58,6 +58,9 @@ class Crud(Banco):
     def listar_um(self, id):
         try:
             listar = self.processar(f"SELECT * FROM {self.tabela} WHERE {self.coluna_id} = %s", (id,), fetch = True)
+            if not listar:
+                print("Não foram encontrados registros")
+    
             return listar
         
         except Exception as e:

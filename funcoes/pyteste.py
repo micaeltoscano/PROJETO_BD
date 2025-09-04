@@ -46,4 +46,8 @@ itenscompra = Itens_compra()
 
 # print(quantidade)
 
-print(servico.pesquisar_nome('raspagem de caneco'))
+#print(servico.pesquisar_nome('raspagem de caneco'))
+
+
+agenda.atualizar_agenda('horario', '15:00', 1)
+
