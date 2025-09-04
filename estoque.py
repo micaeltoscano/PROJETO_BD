@@ -17,9 +17,6 @@ class Estoque(Crud):
     def ler_todo_estoque(self):
        return super().ler_todos()
     
-    def pesquisar_nome_estoque(self, nome):
-        return super().pesquisar_nome(nome)
-    
     def ler_um_estoque(self, id):
         return super().listar_um(id)
     

@@ -78,9 +78,6 @@ class Agenda(Crud):
     def ler_toda_agenda(self):
         return super().ler_todos()
     
-    def pesquisar_id(self, nome):
-        return super().pesquisar_nome(nome)
-    
     def ler_um_agenda(self, id):
         return super().listar_um(id)
 

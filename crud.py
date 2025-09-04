@@ -1,4 +1,5 @@
 from banco import Banco
+import tabulate
 
 class Crud(Banco):
     tabela = None
@@ -34,8 +35,10 @@ class Crud(Banco):
             colunas = [self.coluna_id] + self.colunas_permitidas 
             registros = [dict(zip(colunas, r)) for r in leitura]
             
-            for reg in registros:
-                print(f"{reg}\n")
+            if registros:
+                print(tabulate.tabulate([r.values() for r in registros], headers=registros[0].keys(), tablefmt="fancy_grid"))
+            else:
+                print("Nenhum registro encontrado.")
             
             return
 
@@ -55,6 +58,7 @@ class Crud(Banco):
     def listar_um(self, id):
         try:
             listar = self.processar(f"SELECT * FROM {self.tabela} WHERE {self.coluna_id} = %s", (id,), fetch = True)
+            print(tabulate.tabulate(listar, headers=[self.coluna_id] + self.colunas_permitidas, tablefmt="fancy_grid"))
             return listar
         
         except Exception as e:

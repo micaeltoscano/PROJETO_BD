@@ -4,10 +4,9 @@ import funcionarios
 import servico
 import categoria
 import agendas
+import tabulate
+import disponibilidade
 
-#agenda = Agenda()
-#disponibilidade = Disponibilidade()
-#compra = Compra()
 
 class Interface:
     def __init__(self):
@@ -48,6 +47,25 @@ class Interface:
                 case _:
                     print("Opção inválida. Tente novamente.")
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Clientes ----------------------------------------------------------------------------------------------------
+
     def display_opcao_clientes(self):
         input_opcao = 0
         cliente = clientes.Clientes()
@@ -73,7 +91,7 @@ class Interface:
             match input_opcao:
                 case 1:
                     print("Listando clientes...")
-                    print(cliente.ler_todos_clientes())
+                    cliente.ler_todos_clientes()
                     
                 case 2:
                     print("Adicionando cliente...")
@@ -100,8 +118,6 @@ class Interface:
                     resultado = cliente.ler_um_cliente(id_cliente)
                     if len(resultado) == 0:
                         print("Cliente não encontrado.")
-                    else:
-                        print(resultado)
 
                 case 5:
                     try:
@@ -124,32 +140,47 @@ class Interface:
                 case _:
                     print("Opção inválida. Tente novamente.")
 
+
+
+
+
+
+
+
+
+
+
+
+#Funcionarios ----------------------------------------------------------------------------------------------------
+
     def display_opcao_funcionarios(self):
         input_opcao = 0
         funcionario = funcionarios.Funcionario()
+        disponibilidades = disponibilidade.Disponibilidade()
 
         while input_opcao != 7:
-            print("==============================")
-            print("--- Menu Funcionários ---")
-            print("1 - Listar Funcionários")
-            print("2 - Adicionar Funcionário")
-            print("3 - Pesquisar_nome")
-            print("4 - Ver um Funcionário (id)")
-            print("5 - Atualizar Funcionário")
-            print("6 - Deletar Funcionário")
-            print("7 - Voltar")
-            print("==============================")
+            print("==============================\n"
+            "--- Menu Funcionários ---\n"
+            "1 - Listar Funcionários\n"
+            "2 - Adicionar Funcionário\n"
+            "3 - Pesquisar Funcionário\n"
+            "4 - Ver um Funcionário (id)\n"
+            "5 - Atualizar Funcionário\n"
+            "6 - Deletar Funcionário\n"
+            "7 - Cadastrar Disponibilidade\n"
+            "8 - Voltar\n"
+            "==============================")
 
             try:
-                input_opcao = int(input("Escolha uma opção (1-7): "))
+                input_opcao = int(input("Escolha uma opção (1-8): "))
             except ValueError:
-                print("Entrada inválida. Por favor, insira um número entre 1 e 7.")
+                print("Entrada inválida. Por favor, insira um número entre 1 e 8.")
                 continue
             
             match input_opcao:
                 case 1:
                     print("Listando Funcionários...")
-                    print(funcionario.ler_todos_funcionarios())
+                    funcionario.ler_todos_funcionarios()
 
                 case 2:
                     print("Adicionando Funcionário...")
@@ -178,8 +209,6 @@ class Interface:
                     resultado = funcionario.ler_um_funcionario(id_funcionario)
                     if len(resultado) == 0:
                         print("Funcionário não encontrado.")
-                    else:
-                        print(resultado)
 
                 case 5:
                     try:
@@ -196,6 +225,22 @@ class Interface:
                     funcionario.deletar_funcionario(id_funcionario)
 
                 case 7:
+                    print("Cadastrando disponibilidade para funcionário...\n"
+                    "0 - segunda-feira\n"
+                    "1 - terça-feira\n"
+                    "2 - quarta-feira\n"
+                    "3 - quinta-feira\n"
+                    "4 - sexta-feira\n"
+                    "5 - sábado\n"
+                    "6 - domingo")
+                    dia_semana = input("Qual o dia da semana ele estará disponível ?")
+                    hora_inicio = input("Hora de início (formato 24h, ex: 14:00): ")
+                    hora_fim = input("Hora de término (formato 24h, ex: 18:00): ")
+                    id_funcionario = input("ID do funcionário: ")
+
+                    disponibilidades.cadastro_disponibilidade(id_funcionario, dia_semana, hora_inicio, hora_fim)
+
+                case 8:
                     input("Pressione Enter para voltar ao menu principal...")
                     continue
 
@@ -203,21 +248,38 @@ class Interface:
                     print("Opção inválida. Tente novamente.")
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Serviços ----------------------------------------------------------------------------------------------------
+
     def display_opcao_servicos(self):
         input_opcao = 0
         servicos = servico.Servico()
         categorias = categoria.Categoria()
 
         while input_opcao != 7:
-            print("==============================")
-            print("1 - Listar serviços")
-            print("2 - Adicionar serviço")
-            print("3 - Pesquisar nome do serviço")
-            print("4 - Ver um serviço")
-            print("5 - Atualizar serviço")
-            print("6 - Deletar serviço")
-            print("7 - Voltar")
-            print("==============================")
+            print("==============================\n"
+                    "--- Menu Serviços ---\n"
+                    "1 - Listar serviços\n"
+                    "2 - Adicionar serviço\n"
+                    "3 - Pesquisar nome do serviço\n"
+                    "4 - Ver um serviço\n"
+                    "5 - Atualizar serviço\n"
+                    "6 - Deletar serviço\n"
+                    "7 - Voltar\n"
+                    "==============================")
 
             try:
                 input_opcao = int(input("Escolha uma opção (1-7): "))
@@ -234,11 +296,11 @@ class Interface:
                     try:
                         nome_servico  = input("Digite o nome do serviço:")
                         valor = input("Digite o valor do serviço:")
-                        resposta = input("A categoria já foi cadastrada? (1 ou 0): ")
+                        categorias.ler_todas_categorias()
+                        resposta = int(input("A categoria já foi cadastrada? (1 ou 0): "))
 
                         #Verifica se a categoria já existe
                         if resposta == 1 :
-                            categorias.ler_todas_categorias()
                             id_categoria = input("Digite o id da categoria do serviço:")
 
                         else:
@@ -247,7 +309,7 @@ class Interface:
                             categorias.ler_todas_categorias()
                             id_categoria = input("Digite o id da categoria do serviço:")
 
-                        duracao = input("Digite a duração do serviço:")
+                        duracao = input("Digite a duração do serviço em minutos:")
 
                         servicos.cadastro_servico(nome_servico, valor, id_categoria, duracao)
                     
@@ -264,8 +326,6 @@ class Interface:
                     resultado = servicos.ler_um_servico(id_servico)
                     if len(resultado) == 0:
                         print("Serviço não encontrado.")
-                    else:
-                        print(resultado)
 
                 case 5:
                     try:
@@ -288,24 +348,45 @@ class Interface:
                 case _:
                     print("Opção inválida. Tente novamente.")
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Agendas ----------------------------------------------------------------------------------------------------
+
     def display_opcao_agendas(self):
         input_opcao = 0
         agenda = agendas.Agenda()
+        disponibilidades = disponibilidade.Disponibilidade()
+        servicos = servico.Servico()
+        cliente = clientes.Clientes()
         
         while input_opcao != 7:
-            print("==============================" \
-                  "1 - Listar agendas" \
-                  "2 - Cadastrar agenda" \
-                  "3 - Pesquisar agenda" \
-                  "4 - Ver uma agenda" \
-                  "5 - Atualizar agenda" \
-                  "6 - Deletar agenda" \
-                  "7 - Voltar")
+            print("==============================\n"
+                  "1 - Listar agendas\n"
+                  "2 - Cadastrar agenda\n"  
+                  "3 - Ver uma agenda\n" 
+                  "4 - Atualizar agenda\n" 
+                  "5 - Deletar agenda\n"
+                  "6 - Voltar\n"
+                  "==============================")
 
             try:
-                input_opcao = int(input("Escolha uma opção (1-7): "))
+                input_opcao = int(input("Escolha uma opção (1-6): "))
             except ValueError:
-                print("Entrada inválida. Por favor, insira um número entre 1 e 7.")
+                print("Entrada inválida. Por favor, insira um número entre 1 e 6.")
                 continue
 
             match input_opcao:
@@ -315,28 +396,37 @@ class Interface:
 
                 case 2:
                     try:
-                        dia = input("Digite o dia da agenda:")
+                        disponibilidades.ler_todas_disponibilidades() #Mostra as disponibilidades cadastradas 
+                        dia = input("Digite o dia da agenda (dd/mm/aaaa):")
                         horario = input("Digite o horario da agenda:")
+
+                        disponibilidades.ler_todas_disponibilidades() #Mostra os funcionários disponiveis
                         id_funcionario = input("Digite o id do funcionário:")
-                        id_servico = input("Digite o id de servico")
-                        agenda.cadastro_agenda(dia, horario, id_funcionario, id_servico, id_cliente, status='agendado')
+
+                        servicos.ler_todos_servicos() #Mostra os serviços cadastrados
+                        id_servico = input("Digite o id de servico:")
+
+                        cliente.ler_todos_clientes() #Mostra os clientes cadastrados
+                        id_cliente = input("Digite o id do cliente:")
+
+                        agenda.cadastrar_agenda(dia, horario, id_funcionario, id_servico, id_cliente, status='agendado')
 
                     except Exception as e:
                         print(f"Erro ao adicionar agenda: {e}")
 
                 case 3:
-                    nome = input("Digite o nome da agenda: ")
-                    resultados = agenda.pesquisar_nome(nome)
-                    print(resultados)
+                    id_agenda = input("Digite o id da agenda: ")
+                    resultados = agenda.ler_um_agenda(id_agenda)
+                    if len(resultados) == 0:
+                        print("Agenda não encontrada.")
 
                 case 4:
+                    agenda.ler_toda_agenda()
                     id_agenda = input("ID da agenda: ")
-                    resultado = agenda.ler_uma_agenda(id_agenda)
-                    if len(resultado) == 0:
-                        print("Agenda não encontrada.")
-                    else:
-                        print(resultado)
-
+                    coluna = input("Coluna a ser atualizada (dia, horario, id_funcionario, id_servico, id_cliente, status): ")
+                    novo_valor = input("Novo valor: ")          
+                    agenda.atualizar_agenda(coluna, novo_valor, id_agenda)
+                    
                 case 5:
                     try:
                         coluna = input("Coluna a ser atualizada (nome, data, hora): ")
