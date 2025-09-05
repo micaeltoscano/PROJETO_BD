@@ -94,7 +94,6 @@ class Interface:
                 case 3:
                     nome = input("Nome para pesquisa: ")
                     resultados = cliente.pesquisar_nome(nome)
-                    print(resultados)
                             
                 case 4:
                     id_cliente = input("ID do cliente: ")
@@ -174,13 +173,10 @@ class Interface:
                 case 3:
                     nome = input("Nome para pesquisa: ")
                     resultados = funcionario.pesquisar_nome(nome)
-                    print(resultados)
 
                 case 4:
                     id_funcionario = input("ID do funcionário: ")
                     resultado = funcionario.ler_um_funcionario(id_funcionario)
-                    if len(resultado) == 0:
-                        print("Funcionário não encontrado.")
 
                 case 5:
                     try:
@@ -309,7 +305,7 @@ class Interface:
                 case 8:
                     print("Atualizando categoria...")
                     id_categoria = input("ID da categoria a ser atualizada: ")
-                    coluna = "nome_categoria"
+                    coluna = "nome"
                     novo_valor = input("Digite o novo nome de categoria: ")
                     categorias.atualizar_categoria(coluna, novo_valor, id_categoria)
 

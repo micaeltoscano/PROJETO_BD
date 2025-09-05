@@ -12,3 +12,4 @@ __pycache__/funcionarios.cpython-313.pyc
 __pycache__/pagamentos.cpython-313.pyc
 __pycache__/servico.cpython-313.pyc
 __pycache__/agendas.cpython-313.pyc
+*.pyc

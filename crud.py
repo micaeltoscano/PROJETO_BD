@@ -32,16 +32,11 @@ class Crud(Banco):
     def ler_todos(self):
         try:
             leitura = self.processar(f"SELECT * FROM {self.tabela} ORDER BY {self.coluna_id}", fetch = True)
-            colunas = [self.coluna_id] + self.colunas_permitidas 
-            registros = [dict(zip(colunas, r)) for r in leitura]
-            
-            if registros:
-                print(tabulate.tabulate([r.values() for r in registros], headers=registros[0].keys(), tablefmt="fancy_grid"))
+            if leitura:
+                print(tabulate.tabulate(leitura, headers="keys", tablefmt="fancy_grid"))
             else:
                 print("Nenhum registro encontrado.")
-            
-            return
-
+            return leitura
         except Exception as e:
             print(f"Ocorreu um erro durante o leitura da tabela {self.tabela}: {e}")
             return []
@@ -49,8 +44,11 @@ class Crud(Banco):
     def pesquisar_nome(self, nome):
         try:
             pesquisa = self.processar(f"SELECT * FROM {self.tabela} WHERE nome = %s", (nome,), fetch = True)
+            if pesquisa:
+                print(tabulate.tabulate(pesquisa, headers="keys", tablefmt="fancy_grid"))
+            else:
+                print("Nenhum registro encontrado.")
             return pesquisa
-        
         except Exception as e:
             print(f"Ocorreu um erro durante a pesquisa na tabela {self.tabela}: {e}")
             return []
@@ -58,9 +56,11 @@ class Crud(Banco):
     def listar_um(self, id):
         try:
             listar = self.processar(f"SELECT * FROM {self.tabela} WHERE {self.coluna_id} = %s", (id,), fetch = True)
-            print(tabulate.tabulate(listar, headers=[self.coluna_id] + self.colunas_permitidas, tablefmt="fancy_grid"))
+            if listar:
+                print(tabulate.tabulate(listar, headers="keys", tablefmt="fancy_grid"))
+            else:
+                print("Nenhum registro encontrado.")
             return listar
-        
         except Exception as e:
             print(f"Ocorreu um erro durante a listagem na tabela {self.tabela}: {e}")
             return []
@@ -100,6 +100,3 @@ class Crud(Banco):
 
         except Exception as e:
             print(f"Erro ao deletar registro da tabela {self.tabela}: {e}")
-
-            
-
