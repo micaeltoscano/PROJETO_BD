@@ -28,7 +28,7 @@ class Crud(Banco):
 
         except Exception as e:
             raise ValueError(f"Ocorreu um erro durante o cadastro na tabela {self.tabela}: {e}")
-        
+       
     def ler_todos(self):
         try:
             leitura = self.processar(f"SELECT * FROM {self.tabela} ORDER BY {self.coluna_id}", fetch = True)
@@ -45,7 +45,7 @@ class Crud(Banco):
         except Exception as e:
             print(f"Ocorreu um erro durante o leitura da tabela {self.tabela}: {e}")
             return []
-    
+        
     def pesquisar_nome(self, nome):
         try:
             pesquisa = self.processar(f"SELECT * FROM {self.tabela} WHERE nome = %s", (nome,), fetch = True)
@@ -66,23 +66,27 @@ class Crud(Banco):
             return []
         
     def atualizar(self, coluna, novo_valor, id):
-
         if coluna not in self.colunas_permitidas:
             print(f"Não é possível alterar a coluna: {coluna}")
-            return
+            return False  # Retorna False indicando falha
 
         try:
-            alteracao = self.processar(
-            f"UPDATE {self.tabela} SET {coluna} = %s WHERE {self.coluna_id} = %s",
-            (novo_valor, id))
-
-            if alteracao == 0:
-                 print("Registro não encontrado, nenhuma atualização realizada.")
+            # Certifique-se que self.processar RETORNA o número de linhas afetadas
+            linhas_afetadas = self.processar(
+                f"UPDATE {self.tabela} SET {coluna} = %s WHERE {self.coluna_id} = %s",
+                (novo_valor, id)
+            )
+            
+            if linhas_afetadas == 0:
+                print("Registro não encontrado, nenhuma atualização realizada.")
+                return False
             else:
                 print("Registro atualizado com sucesso!")
+                return True  
 
         except Exception as e:
             print(f"Erro ao atualizar {self.tabela}: {e}")
+            return False  # Retorna False indicando falha
 
     def deletar(self, id):
         
