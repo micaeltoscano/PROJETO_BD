@@ -81,11 +81,11 @@ class Agenda(Crud):
     def ler_um_agenda(self, id):
         return super().listar_um(id)
 
-    #FUNCAO PARA ATUALIZAÇÃO
+    #FUNCAO PARA ATUALIZAÇÃO  - Precisa corrigir a disponibilidade do funcionario quando altera a agenda
     def atualizar_agenda(self, coluna, novo_valor, id):
         return super().atualizar(coluna, novo_valor, id)
 
-    #FUNCAO DE DELEÇÃO
+    #FUNCAO DE DELETAR
     def deletar(self, id):
         return super().deletar(id)
 

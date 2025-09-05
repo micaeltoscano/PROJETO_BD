@@ -47,23 +47,6 @@ class Interface:
                 case _:
                     print("Opção inválida. Tente novamente.")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #Clientes ----------------------------------------------------------------------------------------------------
 
     def display_opcao_clientes(self):
@@ -139,17 +122,6 @@ class Interface:
                     
                 case _:
                     print("Opção inválida. Tente novamente.")
-
-
-
-
-
-
-
-
-
-
-
 
 #Funcionarios ----------------------------------------------------------------------------------------------------
 
@@ -247,21 +219,6 @@ class Interface:
                 case _:
                     print("Opção inválida. Tente novamente.")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #Serviços ----------------------------------------------------------------------------------------------------
 
     def display_opcao_servicos(self):
@@ -278,13 +235,16 @@ class Interface:
                     "4 - Ver um serviço\n"
                     "5 - Atualizar serviço\n"
                     "6 - Deletar serviço\n"
-                    "7 - Voltar\n"
+                    "7 - Deletar categoria\n"
+                    "8 - Atualizar categoria\n"
+                    "9 - Listar categorias\n"
+                    "10 - Voltar\n"
                     "==============================")
 
             try:
-                input_opcao = int(input("Escolha uma opção (1-7): "))
+                input_opcao = int(input("Escolha uma opção (1-10): "))
             except ValueError:
-                print("Entrada inválida. Por favor, insira um número entre 1 e 7.")
+                print("Entrada inválida. Por favor, insira um número entre 1 e 10.")
                 continue
 
             match input_opcao:
@@ -342,27 +302,27 @@ class Interface:
                     servicos.deletar_servico(id_servico)
 
                 case 7:
+                    categorias.ler_todas_categorias()
+                    id_categoria = input("ID da categoria a ser deletada: ")
+                    categorias.deletar_categoria(id_categoria)
+
+                case 8:
+                    print("Atualizando categoria...")
+                    id_categoria = input("ID da categoria a ser atualizada: ")
+                    coluna = "nome_categoria"
+                    novo_valor = input("Digite o novo nome de categoria: ")
+                    categorias.atualizar_categoria(coluna, novo_valor, id_categoria)
+
+                case 9:
+                    print("Listando categorias...")
+                    categorias.ler_todas_categorias()
+
+                case 10:
                     input("Pressione Enter para voltar ao menu principal...")
                     continue
 
                 case _:
                     print("Opção inválida. Tente novamente.")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #Agendas ----------------------------------------------------------------------------------------------------
 
@@ -426,27 +386,19 @@ class Interface:
                     coluna = input("Coluna a ser atualizada (dia, horario, id_funcionario, id_servico, id_cliente, status): ")
                     novo_valor = input("Novo valor: ")          
                     agenda.atualizar_agenda(coluna, novo_valor, id_agenda)
-                    
+
                 case 5:
-                    try:
-                        coluna = input("Coluna a ser atualizada (nome, data, hora): ")
-                        novo_valor = input("Novo valor: ")
-                        id_agenda = input("ID da agenda a ser atualizada: ")
-                        agenda.atualizar_agenda(coluna, novo_valor, id_agenda)
-
-                    except Exception as e:
-                        print(f"Erro ao atualizar agenda: {e}")
-
-                case 6:
                     id_agenda = input("ID da agenda a ser deletada: ")
                     agenda.deletar_agenda(id_agenda)
-
-                case 7:
+                    
+                case 6:
                     input("Pressione Enter para voltar ao menu principal...")
                     continue
 
                 case _:
                     print("Opção inválida. Tente novamente.")
+
+
 
 interface = Interface()
 interface.display_menu()

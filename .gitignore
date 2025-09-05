@@ -1,3 +1,14 @@
 .env
 .pycache
 .pyc
+*.pyc
+__pycache__/banco.cpython-313.pyc
+__pycache__/categoria.cpython-313.pyc
+__pycache__/clientes.cpython-313.pyc
+__pycache__/crud.cpython-313.pyc
+__pycache__/disponibilidade.cpython-313.pyc
+__pycache__/estoque.cpython-313.pyc
+__pycache__/funcionarios.cpython-313.pyc
+__pycache__/pagamentos.cpython-313.pyc
+__pycache__/servico.cpython-313.pyc
+__pycache__/agendas.cpython-313.pyc
